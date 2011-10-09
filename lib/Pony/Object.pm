@@ -1,24 +1,56 @@
-package Pony;
+package Pony::Object;
 
-use warnings;
-use strict;
-no  strict 'refs';
 use feature ':5.10';
-use Storable qw/freeze/;
+
+our $VERSION = '0.000002';
 
 sub import
     {
         my $this = shift;
         my $call = caller;
-        my $isa  = $call . '::ISA';
+        my $isa  = "${call}::ISA";
         
-        push @$isa, @_;
+        push @$isa, shift while @_;
         
-        strict->import;
+        strict  ->import;
         warnings->import;
-        feature->import(':5.10');
+        feature ->import(':5.10');
         
         *{$call.'::has'} = sub { addAttr($call, @_) };
+        
+        eval qq{
+        
+          sub ${call}::new
+          {
+            my \$this  = shift;
+            
+            for my \$base ( \@{"\${this}::ISA"} )
+            {
+              my \$all = \$base->ALL;
+              
+              for my \$k ( keys \%\$all )
+              {
+              
+                unless ( exists \${"${call}::ALL"}{\$k} )
+                {
+                  \%{"\${this}::ALL"} = ( \%{"\${this}::ALL"},
+                                          \$k => \$all->{\$k} );
+                } 
+                
+              }
+            }
+                                    
+            my \%obj = \%{"${call}::ALL"};
+            \$this = bless \\\%obj, \$this;
+            
+            sub ${call}::ALL { \\\%{"${call}::ALL"} }
+            
+            \$this->init(\@_) if $call->can('init');
+            
+            return \$this;
+          }
+        
+        };
     }
 
 sub addAttr
@@ -27,31 +59,27 @@ sub addAttr
         
         given ( ref $value )
         {
+            # methods
             when ( 'CODE' )
             {
                 *{$this."::$attr"} = $value;
             }
             
+            # properties
             default
             {       
-                eval "unless ( $this->can('new') )
-                      {
-                          sub ${this}::new
-                              {
-                                  my \$this = shift;
-                                  my \%obj = \%{${this}::all};
-                                  bless \\\%obj, \$this;
-                              }
-                      }
-                      
-                      \%{${this}::all} = ( \%{${this}::all},
+                eval qq {
+                
+                    \%{"${this}::ALL"} = ( \%{"${this}::ALL"},
                                           $attr => \$value );
-                      
-                      sub ${this}::$attr : lvalue
-                      {
-                          my \$this = shift;
-                             \$this->{$attr};
-                      }";
+                    
+                    sub ${this}::$attr : lvalue
+                    {
+                      my \$this = shift;
+                         \$this->{$attr};
+                    }
+                    
+                }
             }
         }
     }
@@ -63,7 +91,7 @@ __END__
 =head1 EXAMPLE
 
     package test;
-    use Pony;
+    use Pony::Object;
     
     # property
     has a => 'default value';
@@ -90,7 +118,7 @@ __END__
         }
     
     package main;
-    use Pony;
+    use Pony::Object;
     use test;
     
     my $var = new test;

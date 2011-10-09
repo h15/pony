@@ -1,0 +1,27 @@
+---
+abstract: 'Pony modules for web'
+author:
+  - 'Georgy Bazhukov <gosha.bugov@gmail.com>'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+  Test::More: 0.96
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
+distribution_type: module
+generated_by: 'Module::Install version 1.00'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Pony
+no_index:
+  directory:
+    - examples
+    - inc
+    - t
+requires:
+  perl: 5.10.1
+resources:
+  license: http://dev.perl.org/licenses/
+  repository: git://github.com/h15/pony.git
+version: 0.0.2

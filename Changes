@@ -1,0 +1,12 @@
+Revision history for Pony
+
+revision 0.0.2  2010-10-09
+----------------------------
+Make previous revision looks nice.
+    - Add tests
+    - Makefile.pl and other perl module's crap.
+
+revision 0.0.1  2010-10-08
+----------------------------
+Initial revision
+    - Pony object system
