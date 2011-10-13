@@ -31,9 +31,9 @@ sub import
         *{$call.'::has'} = sub { addAttr($call, @_) };
         
         eval qq{
+              
+              package $call;
           
-          unless ( ${call}->can('new') )
-          {
               \$instance if $single;
             
               sub ${call}::new
@@ -67,7 +67,7 @@ sub import
                     
                   }
                 }
-                
+            
                 my \%obj = \%{"${call}::ALL"};
                 \$this = bless \\\%obj, \$this;
                 
@@ -82,8 +82,8 @@ sub import
                 \$this->init(\@_) if $call->can('init');
                 
                 return \$this;
+              
               }
-          }
         };
     }
 

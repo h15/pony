@@ -4,7 +4,8 @@ use lib '../lib';
 
 use strict;
 use warnings;
-use Test::More tests => 27;
+use Data::Dumper;
+use Test::More tests => 31;
 
 use_ok( 'Pony::Object' );
 
@@ -59,6 +60,14 @@ use Pony::Object qw/FirstPonyClass SecondPonyClass/;
 
 package Singleton;
 use Pony::Object singleton => qw/FirstPonyClass SecondPonyClass/;
+
+    has f => 'f';
+    has h => 'h';
+
+package SingletonExt;
+use Pony::Object qw/Singleton/;
+
+    has h => 'hh';
 
 package main;
     
@@ -115,11 +124,20 @@ package main;
     $s1->a = 's';
     ok( 's' eq $s1->a );
     
-    my $s2 = new Singleton;
+    my $s2 = new Singleton;    
     ok( 's' eq $s2->a, 'Singleton test 1' );
     $s2->a = 'z';
     
     ok( 'z' eq $s1->a, 'Singleton test 2' );
-
+    
+    my $s3 = new SingletonExt;
+    ok( 'a' eq $s3->a, 'extends Singleton' );
+    ok( 'hh'eq $s3->h, 'extends Singleton 2' );
+    $s3->a = 'g';
+    
+    my $s4 = new SingletonExt;
+    ok( 'a' eq $s4->a, 'extends Singleton is not singleton' );
+    ok( 'hh'eq $s4->h, 'extends Singleton polymorphism' );
+    
     diag( "Testing Pony::Object $Pony::Object::VERSION" );
     
