@@ -1,13 +1,10 @@
 #!/usr/bin/env perl
 
-BEGIN
-    {
-        push @INC, '../lib';
-    }
+use lib '../lib';
 
 use strict;
 use warnings;
-use Test::More tests => 23;
+use Test::More tests => 27;
 
 use_ok( 'Pony::Object' );
 
@@ -60,8 +57,10 @@ package FourthPonyClass;
 # extends FirstPonyClass SecondPonyClass
 use Pony::Object qw/FirstPonyClass SecondPonyClass/;
 
+package Singleton;
+use Pony::Object singleton => qw/FirstPonyClass SecondPonyClass/;
+
 package main;
-use Pony::Object;
     
     # Stand alone class.
     my $c1 = new FirstPonyClass;
@@ -108,5 +107,19 @@ use Pony::Object;
     ok( 'd' eq $c4->d, 'Property inheritance in multiple inheritance 2' );
     ok( 'b' eq $c4->b, 'Method inheritance in multiple inheritance 2' );
     ok( 'b' eq $c4->a, 'Change property in method ... and again 2' );
+    
+    # Singleton.
+    my $s1 = new Singleton;
+    ok( 'a' eq $s1->a );
+    
+    $s1->a = 's';
+    ok( 's' eq $s1->a );
+    
+    my $s2 = new Singleton;
+    ok( 's' eq $s2->a, 'Singleton test 1' );
+    $s2->a = 'z';
+    
+    ok( 'z' eq $s1->a, 'Singleton test 2' );
 
     diag( "Testing Pony::Object $Pony::Object::VERSION" );
+    

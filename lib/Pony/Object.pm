@@ -2,15 +2,27 @@ package Pony::Object;
 
 use feature ':5.10';
 
-our $VERSION = '0.000002';
+our $VERSION = '0.000003';
 
 sub import
     {
         my $this = shift;
         my $call = caller;
         my $isa  = "${call}::ISA";
+        my $single = 0;
         
-        push @$isa, shift while @_;
+        while ( @_ )
+        {
+            my $param = shift;
+            
+            if ( $param eq 'singleton' )
+            {
+                $single = 1;
+                next;
+            }
+            
+            push @$isa, $param;
+        }
         
         strict  ->import;
         warnings->import;
@@ -19,37 +31,59 @@ sub import
         *{$call.'::has'} = sub { addAttr($call, @_) };
         
         eval qq{
-        
-          sub ${call}::new
+          
+          unless ( ${call}->can('new') )
           {
-            my \$this  = shift;
+              \$instance if $single;
             
-            for my \$base ( \@{"\${this}::ISA"} )
-            {
-              my \$all = \$base->ALL;
-              
-              for my \$k ( keys \%\$all )
+              sub ${call}::new
               {
-              
-                unless ( exists \${"${call}::ALL"}{\$k} )
-                {
-                  \%{"\${this}::ALL"} = ( \%{"\${this}::ALL"},
-                                          \$k => \$all->{\$k} );
-                } 
+                # For singletons.
+                return \$instance if defined \$instance;
                 
+                my \$this  = shift;
+                
+                #
+                #   properties inheritance
+                #
+                
+                for my \$base ( \@{"\${this}::ISA"} )
+                {
+                  if ( \$base->can('ALL') )
+                  {
+                  
+                    my \$all = \$base->ALL;
+                    
+                    for my \$k ( keys \%\$all )
+                    {
+                    
+                      unless ( exists \${"${call}::ALL"}{\$k} )
+                      {
+                        \%{"\${this}::ALL"} = ( \%{"\${this}::ALL"},
+                                                \$k => \$all->{\$k} );
+                      } 
+                      
+                    }
+                    
+                  }
+                }
+                
+                my \%obj = \%{"${call}::ALL"};
+                \$this = bless \\\%obj, \$this;
+                
+                \$instance = \$this if $single;
+                
+                sub ${call}::ALL { \\\%{"${call}::ALL"} }
+                
+                #
+                #   'After' for user.
+                #
+                
+                \$this->init(\@_) if $call->can('init');
+                
+                return \$this;
               }
-            }
-                                    
-            my \%obj = \%{"${call}::ALL"};
-            \$this = bless \\\%obj, \$this;
-            
-            sub ${call}::ALL { \\\%{"${call}::ALL"} }
-            
-            \$this->init(\@_) if $call->can('init');
-            
-            return \$this;
           }
-        
         };
     }
 
