@@ -2,13 +2,13 @@ package Pony::Object;
 
 use feature ':5.10';
 
-our $VERSION = '0.000003';
+our $VERSION = '0.000004';
 
 sub import
     {
-        my $this = shift;
-        my $call = caller;
-        my $isa  = "${call}::ISA";
+        my $this   = shift;
+        my $call   = caller;
+        my $isa    = "${call}::ISA";
         my $single = 0;
         
         while ( @_ )
@@ -28,7 +28,8 @@ sub import
         warnings->import;
         feature ->import(':5.10');
         
-        *{$call.'::has'} = sub { addAttr($call, @_) };
+        *{$call.'::has' } = sub { addAttr($call, @_) };
+        *{$call.'::dump'} = sub { use Data::Dumper; Dumper(@_) };
         
         eval qq{
               
