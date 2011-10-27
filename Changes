@@ -1,5 +1,13 @@
 Revision history for Pony
 
+revision 0.0.5  2010-10-27
+----------------------------
+Add C-style comments support in Pony::Objects.
+
+revision 0.0.4  2010-10-15
+----------------------------
+Add dump function in Pony::Objects.
+
 revision 0.0.3  2010-10-14
 ----------------------------
 Add singleton support.

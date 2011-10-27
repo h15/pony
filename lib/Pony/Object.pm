@@ -2,7 +2,7 @@ package Pony::Object;
 
 use feature ':5.10';
 
-our $VERSION = '0.000004';
+our $VERSION = '0.000005';
 
 sub import
     {
@@ -34,7 +34,10 @@ sub import
         eval qq{
               
               package $call;
-          
+              use Acme::Comment type => 'C++',
+                                one_line => 1,
+                                own_line => 0;
+              
               \$instance if $single;
             
               sub ${call}::new

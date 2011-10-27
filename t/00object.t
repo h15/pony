@@ -5,9 +5,19 @@ use lib '../lib';
 use strict;
 use warnings;
 use Data::Dumper;
-use Test::More tests => 31;
+use Test::More tests => 33;
 
-use_ok( 'Pony::Object' );
+use_ok 'Pony::Object';
+use_ok 'Data::Dumper';
+use_ok 'Acme::Comment';
+
+use Pony::Object;
+
+    /**
+     * Multi line C-style comment test.
+     */
+
+    // One line C-style comment test.
 
 package FirstPonyClass;
 use Pony::Object;

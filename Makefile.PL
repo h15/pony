@@ -13,10 +13,15 @@ resources 'repository'  => 'git://github.com/h15/pony.git';
 my $dir = getcwd;
 
 all_from "$dir/lib/Pony/Object.pm";
+all_from "$dir/lib/Pony/Db.pm";
+all_from "$dir/lib/Pony/Db/Redis.pm";
 
-test_requires "Test::More"      => 0.96;
+test_requires "Test::More" => 0.96;
 
 no_index directory => 'examples';
+no_index directory => 'inc';
+no_index directory => 'script';
+no_index directory => 't';
 
 install_script 'install';
 
