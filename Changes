@@ -1,5 +1,11 @@
 Revision history for Pony
 
+revision 0.0.6  2010-10-28
+----------------------------
+A few fixes for Pony::Objects.
+Added crapy database interface (Pony::Db) and driver Pony::Db::Redis.
+Started Pony::Orm.
+
 revision 0.0.5  2010-10-27
 ----------------------------
 Add C-style comments support in Pony::Objects.

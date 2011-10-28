@@ -21,6 +21,9 @@ sub import
                 next;
             }
             
+            eval "require $param";
+            die  "$@\n" if $@;
+            
             push @$isa, $param;
         }
         
