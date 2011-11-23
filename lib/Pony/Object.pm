@@ -4,6 +4,9 @@ use feature ':5.10';
 
 our $VERSION = '0.000005';
 
+# "You will never find a more wretched hive of scum and villainy.
+#  We must be careful."
+
 sub import
     {
         my $this   = shift;
