@@ -1,5 +1,9 @@
 Revision history for Pony
 
+revision 0.0.6  2010-11-23
+----------------------------
+Add Pony::Stash for storing data.
+
 revision 0.0.6  2010-10-28
 ----------------------------
 A few fixes for Pony::Objects.

@@ -1,0 +1,30 @@
+
+=head1 OVERVIEW
+
+Pony is a modules set, which make Perl more comfirtable for modern development.
+
+=head2 How to install 
+
+At a first, you should to install required modules:
+
+=over
+
+=item Pony::Object
+
+    sudo cpan Acme::Comment
+
+=item Pony::Db::Redis
+
+    sudo cpan Redis
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2011, Georgy Bazhukov.
+
+This program is free software, you can redistribute it and/or modify it under
+the terms of the Artistic License version 2.0.
+
+=cut
+
