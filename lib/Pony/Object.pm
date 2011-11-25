@@ -53,9 +53,7 @@ sub import
                 
                 my \$this  = shift;
                 
-                #
-                #   properties inheritance
-                #
+                # properties inheritance
                 
                 for my \$base ( \@{"\${this}::ISA"} )
                 {
@@ -85,9 +83,7 @@ sub import
                 
                 sub ${call}::ALL { \\\%{"${call}::ALL"} }
                 
-                #
-                #   'After' for user.
-                #
+                # 'After' for user.
                 
                 \$this->init(\@_) if $call->can('init');
                 
@@ -193,4 +189,3 @@ This program is free software, you can redistribute it and/or modify it under
 the terms of the Artistic License version 2.0.
 
 =cut
-

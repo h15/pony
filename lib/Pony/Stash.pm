@@ -1,7 +1,7 @@
 package Pony::Stash;
 use Pony::Object 'singleton';
 
-    # R2D2 where are you? 
+    # "R2D2 where are you?"
 
     use Storable qw(freeze thaw);
     
@@ -10,10 +10,9 @@ use Pony::Object 'singleton';
     has conf => {};
     has file => '';
     
-    /**
-     *  Read file and init
-     *  config by data from file.
-     */
+    # Read file and init
+    # config by data from file.
+    
     sub init
         {
             my $this = shift;
@@ -30,9 +29,9 @@ use Pony::Object 'singleton';
             close F;
         }
     
-    /**
-     *  Save config into file.
-     */
+    # " - What's going on... Buddy? 
+    #   - You're being put into carbon-freeze. "
+    
     sub save
         {
             my $this = shift->new;
@@ -42,10 +41,9 @@ use Pony::Object 'singleton';
             close F;
         }
     
-    /**
-     *  Find config and return.
-     *  Create config if not found ... and return result.
-     */
+    # Find config and return.
+    # Create config if not found ... and return result.
+    
     sub findOrCreate
         {
             my $this = shift->new;
@@ -56,9 +54,9 @@ use Pony::Object 'singleton';
             return $this->get($name);
         }
     
-    /**
-     *  Find config by name and return.
-     */
+    # Find config by name and return.
+    # Return undef, if can't find.
+    
     sub get
         {
             my $this = shift->new;
@@ -68,9 +66,9 @@ use Pony::Object 'singleton';
             return undef;
         }
     
-    /**
-     *  Add or replace hash into $this->conf.
-     */
+    # Create or update stash hash
+    # into $this->conf.
+    
     sub set
         {
             my $this = shift->new;
@@ -79,9 +77,9 @@ use Pony::Object 'singleton';
             $this->conf->{$name} = $conf;
         }
     
-    /**
-     *  Delete element from config hash.
-     */
+    # Delete element from stash hash.
+    #
+    
     sub delete
         {
             my $this = shift->new;
@@ -102,4 +100,3 @@ This program is free software, you can redistribute it and/or modify it under
 the terms of the Artistic License version 2.0.
 
 =cut
-
