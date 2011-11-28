@@ -1,15 +1,18 @@
 package Pony::View::Form::Element;
 use Pony::Object;
     
-    has id     => '';
-    has name   => '';
-    has label  => '';
-    has value  => '';
-    has errors => {};
+    has id       => '';
+    has name     => '';
+    has label    => '';
+    has value    => '';
+    has required =>  0;
+    has ignore   =>  0;
+    has errors   => [];
     
     sub render
         {
-        
+            return sprintf '<div class="error">%s</div>',
+                           'Render is not defined!'
         }
     
     sub isValid
