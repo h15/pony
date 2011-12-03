@@ -28,7 +28,7 @@ use Pony::Object;
             
             for my $v ( keys %{ $this->validators } )
             {
-                $error = $v->getError($data);
+                $error = $v->validate($data);
                 
                 push @{ $this->errors }, $error if $error;
             }

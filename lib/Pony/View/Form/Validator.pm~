@@ -1,0 +1,4 @@
+package Pony::View::Form::Validator;
+use Pony::Object;
+
+1;
