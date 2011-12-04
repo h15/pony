@@ -8,9 +8,21 @@ use Pony::Object 'Pony::View::Form';
     sub init
         {
             my $this = shift;
-               $this->addElement( mail     => text     => {required => 1} );
-               $this->addElement( password => password => {required => 1} );
-               $this->addElement( submit   => submit   => {ignore   => 1} );
+            
+            $this->addElement
+            (
+                mail => text =>
+                {
+                    required => 1,
+                    validators =>
+                    [
+                        new Pony::View::Form::Validator::Like(qr/[0-9a-zA-Z\.\-]+@[0-9a-zA-Z\.\-]+/)
+                    ]
+                }
+            );
+            
+            $this->addElement( password => password => {required => 1} );
+            $this->addElement( submit   => submit   => {ignore   => 1} );
         }
 
     1;
