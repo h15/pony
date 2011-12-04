@@ -1,93 +1,93 @@
 package Pony::Db;
 use Pony::Object 'singleton';
-
-has driver => undef;
-
-sub init
-    {
-        my ( $this, $driver, $options ) = @_;
-        
-        $options ||= {};
-        
-        $driver = "Pony::Db::$driver";
-        
-        eval "use $driver";
-        die "[-] Can't load driver $driver.\n$@\n" if $@;
-        
-        $this->driver = $driver->new($options);
-    }
-
-sub create
-    {
-        my ( $this, @params ) = @_;
-        
-        $this->driver->can('create') ?
-            $this->driver->create(@params) :
-            die "Can't find method 'create' in " . $this->driver;
-    }
-
-sub read
-    {
-        my ( $this, @params ) = @_;
-        
-        $this->driver->can('read') ?
-            $this->driver->read(@params) :
-            die "Can't find method 'read' in " . $this->driver;
-    }
-
-sub update
-    {
-        my ( $this, @params ) = @_;
-        
-        $this->driver->can('update') ?
-            $this->driver->update(@params) :
-            die "Can't find method 'update' in " . $this->driver;
-    }
-
-sub delete
-    {
-        my ( $this, @params ) = @_;
-        
-        $this->driver->can('delete') ?
-            $this->driver->delete(@params) :
-            die "Can't find method 'delete' in " . $this->driver;
-    }
-
-sub list
-    {
-        my ( $this, @params ) = @_;
-        
-        $this->driver->can('list') ?
-            $this->driver->list(@params) :
-            die "Can't find method 'list' in " . $this->driver;
-    }
-
-sub count
-    {
-        my ( $this, @params ) = @_;
-        
-        $this->driver->can('count') ?
-            $this->driver->count(@params) :
-            die "Can't find method 'count' in " . $this->driver;
-    }
-
-sub raw
-    {
-        my ( $this, @params ) = @_;
-        
-        $this->driver->can('raw') ?
-            $this->driver->raw(@params) :
-            die "Can't find method 'raw' in " . $this->driver;
-    }
-
-sub exists
-    {
-        my ( $this, @params ) = @_;
-        
-        $this->driver->can('exists') ?
-            $this->driver->exists(@params) :
-            die "Can't find method 'exists' in " . $this->driver;
-    }
+    
+    has driver => undef;
+    
+    sub init
+        {
+            my ( $this, $driver, $options ) = @_;
+            
+            $options ||= {};
+            
+            $driver = "Pony::Db::$driver";
+            
+            eval "use $driver";
+            die "[-] Can't load driver $driver.\n$@\n" if $@;
+            
+            $this->driver = $driver->new($options);
+        }
+    
+    sub create
+        {
+            my ( $this, @params ) = @_;
+            
+            $this->driver->can('create') ?
+                $this->driver->create(@params) :
+                die "Can't find method 'create' in " . $this->driver;
+        }
+    
+    sub read
+        {
+            my ( $this, @params ) = @_;
+            
+            $this->driver->can('read') ?
+                $this->driver->read(@params) :
+                die "Can't find method 'read' in " . $this->driver;
+        }
+    
+    sub update
+        {
+            my ( $this, @params ) = @_;
+            
+            $this->driver->can('update') ?
+                $this->driver->update(@params) :
+                die "Can't find method 'update' in " . $this->driver;
+        }
+    
+    sub delete
+        {
+            my ( $this, @params ) = @_;
+            
+            $this->driver->can('delete') ?
+                $this->driver->delete(@params) :
+                die "Can't find method 'delete' in " . $this->driver;
+        }
+    
+    sub list
+        {
+            my ( $this, @params ) = @_;
+            
+            $this->driver->can('list') ?
+                $this->driver->list(@params) :
+                die "Can't find method 'list' in " . $this->driver;
+        }
+    
+    sub count
+        {
+            my ( $this, @params ) = @_;
+            
+            $this->driver->can('count') ?
+                $this->driver->count(@params) :
+                die "Can't find method 'count' in " . $this->driver;
+        }
+    
+    sub raw
+        {
+            my ( $this, @params ) = @_;
+            
+            $this->driver->can('raw') ?
+                $this->driver->raw(@params) :
+                die "Can't find method 'raw' in " . $this->driver;
+        }
+    
+    sub exists
+        {
+            my ( $this, @params ) = @_;
+            
+            $this->driver->can('exists') ?
+                $this->driver->exists(@params) :
+                die "Can't find method 'exists' in " . $this->driver;
+        }
 
 1;
 

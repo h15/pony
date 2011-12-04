@@ -15,5 +15,5 @@ use Pony::Object qw/Pony::Orm/;
     has mail    => undef;
     has web     => undef;
     has regdate => undef;
-
+    
 1;

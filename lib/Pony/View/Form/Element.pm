@@ -12,7 +12,8 @@ use Pony::Object;
     
     sub init
         {
-        
+			my $this = shift;
+			my $this->validators
         }
     
     sub render

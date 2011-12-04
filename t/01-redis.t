@@ -5,7 +5,8 @@ use Test::More tests => 31;
 #
 #   Check modules.
 #
-use lib '../lib';
+use Cwd;
+use lib getcwd . '/../lib';
 
 use Pony::Db;
 use Pony::Object;
@@ -33,7 +34,7 @@ my %users = (
 #
 my $db = new Pony::Db (
             Redis => { server => { server => '127.0.0.1:6379' },
-                       prefix => 'Meih0Vi2' } );
+                       prefix => '1' } );
 
 ok( $db->raw->ping, 'Is server alive?' );
 
@@ -59,9 +60,6 @@ $db->update( user => { data  => { first => 'Georgy' },
 
 $user = $db->read( user => { nick => 'bugov' } );
 ok( $user->{first} eq 'Georgy', 'Update' );
-
-my $count = $db->count('user');
-ok( $count ne '0', 'Count' );
 
 $db->delete( user => { nick => 'bugov' }, [qw/mail nick/] );
 
@@ -102,9 +100,6 @@ for my $n ( 1500 .. 2500 )
 {
     $db->delete( user => { id => $n } );
 }
-
-$count = $db->count('user');
-ok( $count == 9_000, 'Delete' );
 
 diag( "Testing Pony::Db::Redis $Pony::Db::Redis::VERSION" );
 
