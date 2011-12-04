@@ -1,5 +1,6 @@
 package Pony::View::Form::Element;
 use Pony::Object;
+use Pony::Stash;
     
     has id          => '';
     has name        => '';
@@ -8,12 +9,39 @@ use Pony::Object;
     has required    =>  0;
     has ignore      =>  0;
     has errors      => [];
-    has validators  => {};
+    has validators  => [];
     
     sub init
         {
 			my $this = shift;
-			my $this->validators
+            my $options = shift;
+            my $prefixes = Pony::Stash->get('PonyValidatorPrefixes');
+            
+            $this->required = 1 if $options->required;
+            $this->ignore   = 1 if $options->ignore;
+            
+            # Init all elements' validators.
+            # You can use custom valudators
+            # if you add their package prefixes
+            # into Stash field 'PonyValidatorPrefixes'.
+            
+            for my $k ( keys %{ $options->validators } )
+            {
+                # Search in all validators' prefixes
+                # use first finded.
+            
+                for my $px ( @$prefixes )
+                {
+                    eval "use $px::$k";
+                    next if $@;
+                    
+                    my $pkg = $px::$k;
+                    push @{ $this->validators },
+                         $pkg->new($options->validators->{$k});
+                    
+                    last;
+                }
+            }
         }
     
     sub render
@@ -27,7 +55,7 @@ use Pony::Object;
             my $this = shift;
             my $data = shift;
             
-            for my $v ( keys %{ $this->validators } )
+            for my $v ( @{ $this->validators } )
             {
                 $error = $v->getError($data);
                 

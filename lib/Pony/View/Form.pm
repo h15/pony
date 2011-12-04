@@ -1,5 +1,6 @@
 package Pony::View::Form;
 use Pony::Object;
+use Pony::Stash;
 
     # " - Boy, it's lucky you have these compartments.
     #   - I use them for smuggling.
@@ -7,17 +8,29 @@ use Pony::Object;
     #     This is ridiculous. "
     
     # Some html form's properties.
-    has action 		=> '';
-    has method 		=> '';
-    has id     		=> '';
-    has attrs  	  	=> {};
-	has decorator 	=> new Pony::View::Form::Decorator;
+    has action      => '';
+    has method      => '';
+    has id          => '';
+    has attrs       => {};
+    has decorator   => new Pony::View::Form::Decorator;
     
     # Internal storeges.
-    has elements 	=> {};
-	has prioritet 	=> [];
-    has errors   	=> {};
-    has data     	=> {};
+    has elements    => {};
+    has prioritet   => [];
+    has errors      => {};
+    has data        => {};
+    has packages    => [];
+    
+    sub init
+        {
+            my $this = shift;
+            
+            # Get validators' packages.
+            # Define default path to validators.
+            
+            $this->packages = Pony::Stash->findOrCreate
+                ( PonyValidatorPrefixes => ['Pony::View::Form::Validator'] );
+        }
     
     # Check values of all elements.
     # Return 1 or 0 and if some error happies
@@ -54,74 +67,74 @@ use Pony::Object;
     
     sub render
         {
-			my $this = shift;
-			my @elements;
-			my $formStr = '<form action="%s" method="%s"
-									id="%s" %s>%s</form>';
-			my $attrStr = '';
-			
-			# Attribute's hash to string.
-			
-			while ( my ( $k, $v ) = each %{ $this->attrs } )
-			{
-				$attrStr .= sprintf '%s="%s" ', $k, $v;
-			}
-			
-			$formStr = sprintf $formStr, $this->action, $this->method,
-										 $this->id, $attrStr, '%s';
-			
-			# Create an array of rendered elements
-			# and other useful data.
-			
-			for my $k ( @{ $this->prioritet } )
-			{
-				my $e = $this->elements->{$k};
-				
-				my $errorStr = join '</li><li>', @{ $e->errors };
-				   $errorStr = "<ul class=error><li>$errorStr</li></ul>";
-				   
-				my $req = ( $e->required ? '*' : '' );
-				
-				my $h = {
-							label	=> $e->label,
-							value	=> $e->render(),
-							error	=> $errorStr,
-							require => $req
-						};
-				
-				push @elements, $h;
-			}
-			
-			# Run decorator.
-			# It will return nice html code.
-			
-			return $this->decorator( $formStr, @elements );
+            my $this = shift;
+            my @elements;
+            my $formStr = '<form action="%s" method="%s"
+                                    id="%s" %s>%s</form>';
+            my $attrStr = '';
+            
+            # Attribute's hash to string.
+
+            while ( my ( $k, $v ) = each %{ $this->attrs } )
+            {
+                $attrStr .= sprintf '%s="%s" ', $k, $v;
+            }
+
+            $formStr = sprintf $formStr, $this->action, $this->method,
+                                         $this->id, $attrStr, '%s';
+
+            # Create an array of rendered elements
+            # and other useful data.
+
+            for my $k ( @{ $this->prioritet } )
+            {
+                my $e = $this->elements->{$k};
+                
+                my $errorStr = join '</li><li>', @{ $e->errors };
+                   $errorStr = "<ul class=error><li>$errorStr</li></ul>";
+                   
+                my $req = ( $e->required ? '*' : '' );
+                
+                my $h = {
+                            label    => $e->label,
+                            value    => $e->render(),
+                            error    => $errorStr,
+                            require  => $req
+                        };
+                
+                push @elements, $h;
+            }
+
+            # Run decorator.
+            # It will return nice html code.
+
+            return $this->decorator( $formStr, @elements );
         }
     
-	# Add element to form.
-	# Object or param list can be used.
-	
+    # Add element to form.
+    # Object or param list can be used.
+    
     sub addElement
         {
             my ( $this, $name, $type, $options ) = @_;
-			
-			# Create and add element.
-			if ( defined $type )
-			{
-				my $package = 'Pony::View::Form::Element::' . ucfirst $type;
-				
-				eval "use $package";
-				
-				push @{ $this->prioritet }, $name;
-				$this->elements->{$name} = $package->new($name, $options);
-			}
-			
-			# Add element object.
-			else
-			{
-				push @{ $this->prioritet }, $name->name;
-				$this->elements->{$name->name} = $name;
-			}
+            
+            # Create and add element.
+            if ( defined $type )
+            {
+                my $package = 'Pony::View::Form::Element::' . ucfirst $type;
+                
+                eval "use $package";
+                
+                push @{ $this->prioritet }, $name;
+                $this->elements->{$name} = $package->new($name, $options);
+            }
+            
+            # Add element object.
+            else
+            {
+                push @{ $this->prioritet }, $name->name;
+                $this->elements->{$name->name} = $name;
+            }
         }
     
 1;

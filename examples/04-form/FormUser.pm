@@ -5,7 +5,7 @@ use Pony::Object 'Pony::View::Form';
     has method => 'post';
     has id     => 'form-user';
     
-    sub init
+    sub create
         {
             my $this = shift;
             
@@ -15,9 +15,9 @@ use Pony::Object 'Pony::View::Form';
                 {
                     required => 1,
                     validators =>
-                    [
-                        new Pony::View::Form::Validator::Like(qr/[0-9a-zA-Z\.\-]+@[0-9a-zA-Z\.\-]+/)
-                    ]
+                    {
+                        Like => qr/[0-9a-zA-Z\.\-]+@[0-9a-zA-Z\.\-]+/
+                    }
                 }
             );
             
