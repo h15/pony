@@ -32,8 +32,8 @@ use Pony::Object;
 			# Wrap elements into form.
 			# Wrap form into from decorator.
 			
-			$htmlCode = sprintf $form, $htmlCode;
 			$htmlCode = sprintf $this->form, $htmlCode;
+			$htmlCode = sprintf $formStr, $htmlCode;
 			
 			return $htmlCode;
 		}

@@ -14,18 +14,30 @@ use Pony::Stash;
     sub init
         {
 			my $this = shift;
+			   $this->name = shift;
+			
             my $options = shift;
             my $prefixes = Pony::Stash->get('PonyValidatorPrefixes');
             
-            $this->required = 1 if $options->required;
-            $this->ignore   = 1 if $options->ignore;
+            $this->required = 1 if $options->{required};
+            $this->ignore   = 1 if $options->{ignore};
+            
+            delete $options->{required};
+            delete $options->{ignore};
+            
+            for my $k ( keys %{ $options } )
+            {
+                $this->$k = $options->{$k} if $this->can($k);
+            }
+            
+            $this->id = $this->name unless $this->id;
             
             # Init all elements' validators.
             # You can use custom valudators
             # if you add their package prefixes
             # into Stash field 'PonyValidatorPrefixes'.
             
-            for my $k ( keys %{ $options->validators } )
+            for my $k ( keys %{ $options->{validators} } )
             {
                 # Search in all validators' prefixes
                 # use first finded.
@@ -35,9 +47,9 @@ use Pony::Stash;
                     eval "use $px::$k";
                     next if $@;
                     
-                    my $pkg = $px::$k;
+                    my $pkg = "${px}::$k";
                     push @{ $this->validators },
-                         $pkg->new($options->validators->{$k});
+                         $pkg->new($options->{validators}->{$k});
                     
                     last;
                 }
@@ -57,7 +69,7 @@ use Pony::Stash;
             
             for my $v ( @{ $this->validators } )
             {
-                $error = $v->getError($data);
+                my $error = $v->getError($data);
                 
                 push @{ $this->errors }, $error if $error;
             }

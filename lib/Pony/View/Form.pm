@@ -1,6 +1,7 @@
 package Pony::View::Form;
 use Pony::Object;
 use Pony::Stash;
+use Pony::View::Form::Decorator;
 
     # " - Boy, it's lucky you have these compartments.
     #   - I use them for smuggling.
@@ -12,7 +13,7 @@ use Pony::Stash;
     has method      => '';
     has id          => '';
     has attrs       => {};
-    has decorator   => new Pony::View::Form::Decorator;
+    has decorator   => undef;
     
     # Internal storeges.
     has elements    => {};
@@ -24,12 +25,15 @@ use Pony::Stash;
     sub init
         {
             my $this = shift;
+               $this->decorator = new Pony::View::Form::Decorator;
             
             # Get validators' packages.
             # Define default path to validators.
             
             $this->packages = Pony::Stash->findOrCreate
                 ( PonyValidatorPrefixes => ['Pony::View::Form::Validator'] );
+            
+            $this->create();
         }
     
     # Check values of all elements.
@@ -97,7 +101,7 @@ use Pony::Stash;
                 
                 my $h = {
                             label    => $e->label,
-                            value    => $e->render(),
+                            value    => $e->render( $this->id ),
                             error    => $errorStr,
                             require  => $req
                         };
@@ -108,7 +112,7 @@ use Pony::Stash;
             # Run decorator.
             # It will return nice html code.
 
-            return $this->decorator( $formStr, @elements );
+            return $this->decorator->decorate( $formStr, @elements );
         }
     
     # Add element to form.
@@ -124,8 +128,10 @@ use Pony::Stash;
                 my $package = 'Pony::View::Form::Element::' . ucfirst $type;
                 
                 eval "use $package";
+                die if $@;
                 
                 push @{ $this->prioritet }, $name;
+                
                 $this->elements->{$name} = $package->new($name, $options);
             }
             
