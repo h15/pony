@@ -24,7 +24,7 @@ use Pony::Object qw/Pony::View::Form::Validator/;
             my $re   = $this->regexp;
             
             return undef if $data =~ /$re/;
-            return 'does not valid format';
+            return 'does not like required format';
         }
 
 1;

@@ -27,6 +27,72 @@ use Pony::Object qw/Pony::View::Form/;
 
     1;
 
+package FormManyFields;
+use Pony::Object qw/Pony::View::Form/;
+
+    has action => '/registration';
+    has method => 'post';
+    has id     => 'form-registration';
+
+    sub create
+        {
+            my $this = shift;
+            
+            $this->addElement
+            (
+                name => text =>
+                {
+                    required    => 1,
+                    label       => 'Name',
+                }
+            );
+            
+            $this->addElement
+            (
+                mail => text =>
+                {
+                    required    => 1,
+                    label       => 'E-mail',
+                    validators  =>
+                    {
+                        Like    => qr/[\.\-\w\d]+\@(?:[\.\-\w\d]+\.)+[\w]{2,5}/,
+                    }
+                }
+            );
+            
+            $this->addElement
+            (
+                password => password =>
+                {
+                    required    => 1,
+                    label       => 'Password',
+                    validators  =>
+                    {
+                        Length  => [ 8, 32 ],
+                        Have    => [ qw/- 1 a A/ ],
+                    }
+                }
+            );
+            
+            $this->addElement
+            (
+                password2 => password =>
+                {
+                    required    => 1,
+                    label       => 'Retype password',
+                    validators  =>
+                    {
+                        Length  => [ 8, 32 ],
+                        Have    => [ qw/- 1 a A/ ],
+                    }
+                }
+            );
+            
+            $this->addElement( submit => submit => {ignore => 1} );
+        }
+
+    1;
+
 package main;
 
 # Init forms' data for tests.
@@ -46,14 +112,57 @@ q{<form action="/user" method="post" id="form-user" >
 </table>
 </form>};
 
+$form[1] =
+q{<form action="/registration" method="post" id="form-registration" >
+<table class="pony-form">
+<tr>
+<td>E-mail</td>
+<td><input class="pony-text" id="form-registration-mail" value="" name="mail" required="1">
+</td>
+<td>*</td>
+</tr><tr>
+<td>Name</td>
+<td><input class="pony-text" id="form-registration-name" value="" name="name" required="1">
+</td>
+<td>*</td>
+</tr><tr>
+<td>E-mail</td>
+<td><input class="pony-text" id="form-registration-mail" value="" name="mail" required="1">
+</td>
+<td>*</td>
+</tr><tr>
+<td>Password</td>
+<td><input class="pony-password" type=password id="form-registration-password" name="password" required="1">
+</td>
+<td>*</td>
+</tr><tr>
+<td>Retype password</td>
+<td><input class="pony-password" type=password id="form-registration-password2" name="password2" required="1">
+</td>
+<td>*</td>
+</tr><tr>
+<td></td>
+<td><input class="pony-submit" type=submit id="form-registration-submit" name="submit">
+</td>
+<td></td>
+</tr>
+</table>
+</form>};
+
 clean();
 
 Pony::Stash->new('./t/03-stash/config.dat');
+Pony::Stash->set( PonyValidatorPrefixes => ['Pony::View::Form::Validator'] );
 
 my $formText = new FormText;
 my $a = $formText->render();
 
 ok( $form[0] eq $a, 'Render simple for with text input' );
+
+my $formReg = new FormManyFields;
+   $a = $formReg->render();
+
+ok( $form[1] eq $a, 'Render advanced form' );
 
     /**
      *  Clean up

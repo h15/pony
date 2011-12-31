@@ -27,6 +27,8 @@ use Pony::Stash;
             
             for my $k ( keys %{ $options } )
             {
+                next if $k eq 'validators';
+                
                 $this->$k = $options->{$k} if $this->can($k);
             }
             
@@ -44,7 +46,7 @@ use Pony::Stash;
             
                 for my $px ( @$prefixes )
                 {
-                    eval "use $px::$k";
+                    eval "use ${px}::$k";
                     next if $@;
                     
                     my $pkg = "${px}::$k";
