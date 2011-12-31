@@ -1,8 +1,8 @@
 package Pony::View::Form::Element::Text;
 use Pony::Object qw/Pony::View::Form::Element/;
 
-    has valueForm => q/<input class="pony-text" id="%s"
-                              value="%s" name="%s" required="%s">/;
+    has valueForm =>
+        q/<input class="pony-text" id="%s" value="%s" name="%s" required="%s">/;
     
     sub render
         {

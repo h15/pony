@@ -73,8 +73,7 @@ use Pony::View::Form::Decorator;
         {
             my $this = shift;
             my @elements;
-            my $formStr = '<form action="%s" method="%s"
-                                    id="%s" %s>%s</form>';
+            my $formStr = qq{<form action="\%s" method="\%s" id="\%s" \%s>\n\%s\n</form>};
             my $attrStr = '';
             
             # Attribute's hash to string.
@@ -93,9 +92,14 @@ use Pony::View::Form::Decorator;
             for my $k ( @{ $this->prioritet } )
             {
                 my $e = $this->elements->{$k};
+                my $errorStr = '';
                 
-                my $errorStr = join '</li><li>', @{ $e->errors };
-                   $errorStr = "<ul class=error><li>$errorStr</li></ul>";
+                if ( @{ $e->errors } )
+                {
+                    $errorStr = join '</li><li>', @{ $e->errors };
+                    $errorStr = '<div class="error"><ul class=error><li>'
+                              . $errorStr . '</li></ul></div>';
+                }
                    
                 my $req = ( $e->required ? '*' : '' );
                 
