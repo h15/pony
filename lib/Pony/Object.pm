@@ -2,7 +2,7 @@ package Pony::Object;
 
 use feature ':5.10';
 
-our $VERSION = '0.000005';
+our $VERSION = '0.000006';
 
 # "You will never find a more wretched hive of scum and villainy.
 #  We must be careful."
@@ -91,6 +91,8 @@ sub import
               
               }
         };
+        
+        die "$@\n" if $@;
     }
 
 sub addAttr
@@ -119,7 +121,9 @@ sub addAttr
                          \$this->{$attr};
                     }
                     
-                }
+                };
+                
+                die "$@\n" if $@;
             }
         }
     }
