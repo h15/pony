@@ -164,6 +164,17 @@ my $formReg = new FormManyFields;
 
 ok( $form[1] eq $a, 'Render advanced form' );
 
+my $data =  {
+                name => 'Gosha',
+                mail => 'gosha.bugov@gmail.com',
+                password => '123456789',
+                password2 => '123456789',
+            };
+
+$formReg->data = $data;
+$formReg->isValid();
+print dump $formReg->errors;
+
     /**
      *  Clean up
      */
