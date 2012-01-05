@@ -5,8 +5,8 @@ use lib './t';
 
 use strict;
 use warnings;
-use Data::Dumper;
-use Test::More tests => 33;
+
+use Test::More tests => 55;
 
 use_ok 'Pony::Object';
 use_ok 'Data::Dumper';
@@ -19,15 +19,17 @@ use Object::ThirdPonyClass;
 use Object::FourthPonyClass;
 use Object::Singleton;
 use Object::SingletonExt;
+use Object::DeepCopy;
+use Object::DeepCopyExt;
+use Object::DeepCopyExtExt;
 
-    /**
-     * Multi line C-style comment test.
-     */
-
-    // One line C-style comment test.
-
+package main;
+    
     # Stand alone class.
+    #
+    
     my $c1 = new Object::FirstPonyClass;
+    #say dump $c1;die;
     
     ok( 'a' eq $c1->a, 'Property default value' );
     ok( 'd' eq $c1->d );
@@ -51,6 +53,8 @@ use Object::SingletonExt;
     ok( 'b' eq $c1->d->{a}, 'Property is a hash' );
     
     # Inheritance tests.
+    #
+    
     my $c2 = new Object::SecondPonyClass;
     
     ok( 'a' eq $c2->a, 'Property default value from base class' );
@@ -60,6 +64,8 @@ use Object::SingletonExt;
     ok( 'e' eq $c2->e, 'new Object::method' );
     
     # Multiple inheritance.
+    #
+    
     my $c3 = new Object::ThirdPonyClass;
     
     ok( 'dd' eq $c3->d, 'Property inheritance in multiple inheritance' );
@@ -73,6 +79,8 @@ use Object::SingletonExt;
     ok( 'b' eq $c4->a, 'Change property in method ... and again 2' );
     
     # Singleton.
+    #
+    
     my $s1 = new Object::Singleton;
     ok( 'a' eq $s1->a );
     
@@ -93,6 +101,83 @@ use Object::SingletonExt;
     my $s4 = new Object::SingletonExt;
     ok( 'a' eq $s4->a, 'extends Singleton is not singleton' );
     ok( 'hh'eq $s4->h, 'extends Singleton polymorphism' );
+    
+    # Deep copy
+    #
+    
+    my $w1 = new Object::DeepCopy;
+    my $w2 = new Object::DeepCopy;
+    
+    push @{ $w1->ary }, qw/one two three/;
+    push @{ $w2->ary }, qw/1 2 3/;
+    
+    ok( @{ $w2->ary } eq 3, 'Deep Copy: simple array' );
+    
+    my $w3 = new Object::DeepCopy;
+    my $w4 = new Object::DeepCopy;
+    
+    for my $i ( 1 .. 3 )
+    {
+        $w3->struct->{group}->{"item$i"}->{foo} = "val1$i";
+        $w3->struct->{group}->{"item$i"}->{bar} = "val2$i";
+    }
+    
+    $w1->struct->{group} = { qw/one 1 two 2 three 3/ };
+    
+    ok( $w3->struct->{group}->{item2}->{foo} eq "val12", 'Deep Copy 1' );
+    ok( $w3->struct->{group}->{item3}->{bar} eq "val23", 'Deep Copy 2' );
+    ok( $w4->struct->{group}->{item2}->{foo} eq "value", 'Deep Copy 3' );
+    ok( $w4->struct->{group}->{item3}->{bar} eq "value", 'Deep Copy 4' );
+    ok( $w3->struct->{group}->{item2}->{foo} eq "val12", 'Deep Copy 5' );
+    ok( $w3->struct->{group}->{item3}->{bar} eq "val23", 'Deep Copy 6' );
+    
+    my $dce1 = new Object::DeepCopyExt;
+    my $dce2 = new Object::DeepCopyExt;
+    
+    ok( $dce1->struct->{group}->{item2}->{foo}
+        eq "value", 'Deep Copy inheritance 1' );
+    ok( $dce1->struct->{group}->{item3}->{bar}
+        eq "value", 'Deep Copy inheritance 2' );
+    
+    $dce2->struct->{group} = { qw/one 1 two 2 three 3/ };
+    
+    ok( $dce2->struct->{group}->{one} eq 1, 'Deep Copy inheritance 3' );
+    ok( $dce2->struct->{group}->{two} eq 2, 'Deep Copy inheritance 4' );
+    ok( $dce1->struct->{group}->{item2}->{foo}
+        eq "value", 'Deep Copy inheritance 5' );
+    
+    my $dcee1 = new Object::DeepCopyExtExt;
+    my $dcee2 = new Object::DeepCopyExtExt;
+    
+    ok( $dcee1->struct->{group}->{item2}->{foo}
+        eq "value", 'Deep Copy inh inh 1' );
+    ok( $dcee1->struct->{group}->{item3}->{bar}
+        eq "value", 'Deep Copy inh inh 2' );
+    
+    $dcee2->struct->{group} = { qw/one 1 two 2 three 3/ };
+    
+    ok( $dcee2->struct->{group}->{one} eq 1, 'Deep Copy inh inh 3' );
+    ok( $dcee2->struct->{group}->{two} eq 2, 'Deep Copy inh inh 4' );
+    ok( $dcee1->struct->{group}->{item2}->{foo}
+        eq "value", 'Deep Copy inh inh 5' );
+    
+    # ALL
+    #
+    
+    my $all = $c1->ALL();
+    
+    ok( 'a' eq $all->{a}, 'Check ALL property 1' );
+    ok( 'd' eq $all->{d}, 'Check ALL property 2' );
+    
+    $all = $dcee1->ALL();
+    
+    ok( 'value' eq $all->{struct}->{group}->{item1}->{foo},
+                                        'Check ALL property 3' );
+    
+    $all = $s3->ALL();
+    
+    ok( 'a' eq $all->{a}, 'Check ALL property 4' );
+    ok( 'hh'eq $all->{h}, 'Check ALL property 5' );
     
     diag( "Testing Pony::Object $Pony::Object::VERSION" );
     

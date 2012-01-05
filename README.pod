@@ -11,7 +11,8 @@ At a first, you should to install required modules:
 
 =item Pony::Object
 
-    sudo cpan Acme::Comment
+    sudo aptitude install gcc
+    sudo cpan Acme::Comment Clone
 
 =item Pony::Db::Redis
 
