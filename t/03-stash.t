@@ -55,9 +55,8 @@ clean();
 
 diag( "Testing Pony::Stash $Pony::Stash::VERSION" );
 
-    /**
-     *  Clean up
-     */
+    # Clean up
+    #
     sub clean
         {
             open  C, '>./t/03-stash/config.dat' or die;
