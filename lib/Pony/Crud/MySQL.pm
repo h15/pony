@@ -138,31 +138,20 @@ use Pony::Crud::Dbh::MySQL;
             return @result;
         }
     
+    # Params : {where}(?).
+    # Returns: integer.
     sub count
         {
             my $this  = shift;
-            my ( $where, $fields, $order, $rule, $offset, $limit ) = @_;
+            my ( $where ) = @_;
             my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
-            
-            # Define default values
-            #
-            
-            @$fields = map { "`$_`" } @$fields if $fields;
-            
-            $fields ||= ['*'];
-            $order  ||= 'id';
-            $rule   ||= 'DESC';
-            $offset ||= 0;
-            $limit  ||= 20;
             
             # Prepare
             #
             
             my $w = ( $where ? join ' and ', $this->_prepare($where) : '1=1' );
             my $t = $this->table;
-            my $f = join ',', @$fields;
-            my $q = "SELECT COUNT(*) FROM `$t` WHERE $w
-                     ORDER BY $order $rule LIMIT $offset, $limit";
+            my $q = "SELECT COUNT(*) FROM `$t` WHERE $w";
             
             # Run request and return result.
             #
