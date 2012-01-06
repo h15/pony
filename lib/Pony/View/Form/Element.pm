@@ -77,6 +77,9 @@ use Pony::Stash;
             }
             
             return 0 if @{ $this->errors };
+            
+            $this->value = $data;
+            
             return 1;
         }
 

@@ -16,7 +16,10 @@ use DBI;
                              $conn,
                              $auth->{user},
                              $auth->{password},
-                             { 'RaiseError' => 1 }
+                             {
+                                RaiseError => 1,
+                                mysql_enable_utf8 => 1
+                             }
                          )
                          or die $DBI::errstr;
         }

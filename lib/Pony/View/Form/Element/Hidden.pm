@@ -1,8 +1,8 @@
-package Pony::View::Form::Element::Password;
+package Pony::View::Form::Element::Hidden;
 use Pony::Object qw/Pony::View::Form::Element/;
 
     has valueForm =>
-        q/<input class="pony-password" type=password id="%s" name="%s" %s>/;
+        q/<input type="hidden" class="pony-text" id="%s" value="%s" name="%s" %s>/;
     
     sub render
         {
@@ -10,7 +10,7 @@ use Pony::Object qw/Pony::View::Form::Element/;
             my $formId = shift;
             
             sprintf $this->valueForm, "$formId-".$this->id,
-                    $this->name, ($this->required ? 'required' : '');
+                    $this->value, $this->name, ($this->required ? 'required' : '');
         }
 
 1;
