@@ -105,7 +105,7 @@ q{<form action="/user" method="post" id="form-user" >
 <table class="pony-form">
 <tr>
 <td>E-mail</td>
-<td><input class="pony-text" id="form-user-mail" value="" name="mail" required="1">
+<td><input class="pony-text" id="form-user-mail" value="" name="mail" required>
 </td>
 <td>*</td>
 </tr>
@@ -117,22 +117,22 @@ q{<form action="/registration" method="post" id="form-registration" >
 <table class="pony-form">
 <tr>
 <td>Name</td>
-<td><input class="pony-text" id="form-registration-name" value="" name="name" required="1">
+<td><input class="pony-text" id="form-registration-name" value="" name="name" required>
 </td>
 <td>*</td>
 </tr><tr>
 <td>E-mail</td>
-<td><input class="pony-text" id="form-registration-mail" value="" name="mail" required="1">
+<td><input class="pony-text" id="form-registration-mail" value="" name="mail" required>
 </td>
 <td>*</td>
 </tr><tr>
 <td>Password</td>
-<td><input class="pony-password" type=password id="form-registration-password" name="password" required="1">
+<td><input class="pony-password" type=password id="form-registration-password" name="password" required>
 </td>
 <td>*</td>
 </tr><tr>
 <td>Retype password</td>
-<td><input class="pony-password" type=password id="form-registration-password2" name="password2" required="1">
+<td><input class="pony-password" type=password id="form-registration-password2" name="password2" required>
 </td>
 <td>*</td>
 </tr><tr>
@@ -148,22 +148,22 @@ $form[2] = q{<form action="/registration" method="post" id="form-registration" >
 <table class="pony-form">
 <tr>
 <td>Name</td>
-<td><input class="pony-text" id="form-registration-name" value="" name="name" required="1">
+<td><input class="pony-text" id="form-registration-name" value="Gosha" name="name" required>
 </td>
 <td>*</td>
 </tr><tr>
 <td>E-mail</td>
-<td><input class="pony-text" id="form-registration-mail" value="" name="mail" required="1">
+<td><input class="pony-text" id="form-registration-mail" value="gosha.bugov@gmail.com" name="mail" required>
 </td>
 <td>*</td>
 </tr><tr>
 <td>Password</td>
-<td><input class="pony-password" type=password id="form-registration-password" name="password" required="1">
+<td><input class="pony-password" type=password id="form-registration-password" name="password" required>
 <div class="error"><ul class=error><li>too short</li><li>does not valid</li></ul></div></td>
 <td>*</td>
 </tr><tr>
 <td>Retype password</td>
-<td><input class="pony-password" type=password id="form-registration-password2" name="password2" required="1">
+<td><input class="pony-password" type=password id="form-registration-password2" name="password2" required>
 <div class="error"><ul class=error><li>does not valid</li></ul></div></td>
 <td>*</td>
 </tr><tr>
@@ -210,6 +210,10 @@ ok( 'does not valid' eq $e->{'password2'}->[0][0], 'Errors 4' );
 $a = $formReg->render();
 
 ok( $form[2] eq $a, 'Render advanced form after error' );
+
+
+diag( "Testing Pony::View::Form $Pony::View::Form::VERSION" );
+    
 
     # Clean up
     #

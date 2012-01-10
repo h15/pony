@@ -8,6 +8,8 @@ use Pony::View::Form::Decorator;
     #     I never thought I'd be smuggling myself in them.
     #     This is ridiculous. "
     
+    our $VERSION = '0.000003';
+    
     # Some html form's properties.
     has action      => '';
     has method      => '';

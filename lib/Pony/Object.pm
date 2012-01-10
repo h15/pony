@@ -4,7 +4,7 @@ use feature ':5.10';
 use Storable qw/dclone/;
 use Module::Load;
 
-our $VERSION = '0.000008';
+our $VERSION = '0.001001';
 
 # "You will never find a more wretched hive of scum and villainy.
 #  We must be careful."

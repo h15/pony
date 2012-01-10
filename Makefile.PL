@@ -12,7 +12,9 @@ resources 'repository'  => 'git://github.com/h15/pony.git';
 
 my $dir = getcwd;
 
-test_requires "Test::More" => 0.96;
+test_requires "Test::More" => 0.92;
+
+all_from "$dir/lib/Pony/Object.pm";
 
 no_index directory => 'examples';
 no_index directory => 'inc';
