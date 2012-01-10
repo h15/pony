@@ -1,7 +1,7 @@
 
 =head1 OVERVIEW
 
-Pony is a modules set, which make Perl more comfirtable for modern development.
+Pony is a module set, which make Perl more comfirtable for modern development.
 
 =head2 How to install 
 
@@ -9,17 +9,13 @@ At a first, you should to install required modules:
 
 =over
 
-=item Pony::Object
+=item for Pony::Crud::Dbh::MySQL
 
-    # Now Pony is not need any unusual modules.
-
-=item Pony::Db::Redis
-
-    sudo cpan Redis
+    sudo cpan DBI
 
 =back
 
-=head2 More info about each module
+=head2 More info about some modules
 
 =head3 Pony::Object
 

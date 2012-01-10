@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 use lib './lib';
-use Test::More tests => 8;
+use Test::More tests => 3;
 
 use_ok 'Pony::Object';
 use_ok 'Pony::Crud::Dbh::MySQL';
@@ -10,6 +10,8 @@ use_ok 'Pony::Crud::MySQL';
 use Pony::Object;
 use Pony::Crud::Dbh::MySQL;
 use Pony::Crud::MySQL;
+
+__END__
 
 my $auth =  {
                 host     => 'localhost',
