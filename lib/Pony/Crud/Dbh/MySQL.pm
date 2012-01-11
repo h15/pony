@@ -18,7 +18,8 @@ use DBI;
                              $auth->{password},
                              {
                                 RaiseError => 1,
-                                mysql_enable_utf8 => 1
+                                mysql_enable_utf8 => 1,
+                                mysql_auto_reconnect => 1
                              }
                          )
                          or die $DBI::errstr;
