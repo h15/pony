@@ -6,11 +6,10 @@ use lib './t';
 use strict;
 use warnings;
 
-use Test::More tests => 55;
+use Test::More tests => 54;
 
 use_ok 'Pony::Object';
 use_ok 'Data::Dumper';
-use_ok 'Acme::Comment';
 
 use Pony::Object;
 use Object::FirstPonyClass;
