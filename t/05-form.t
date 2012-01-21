@@ -159,12 +159,12 @@ $form[2] = q{<form action="/registration" method="post" id="form-registration" >
 </tr><tr>
 <td>Password</td>
 <td><input class="pony-password" type=password id="form-registration-password" name="password" required>
-<div class="error"><ul class=error><li>too short</li><li>does not valid</li></ul></div></td>
+<div class="error"><ul class=error><li>Length must be between %d and %d</li><li>Value must have %s like %s</li></ul></div></td>
 <td>*</td>
 </tr><tr>
 <td>Retype password</td>
 <td><input class="pony-password" type=password id="form-registration-password2" name="password2" required>
-<div class="error"><ul class=error><li>does not valid</li></ul></div></td>
+<div class="error"><ul class=error><li>Value must have %s like %s</li></ul></div></td>
 <td>*</td>
 </tr><tr>
 <td></td>
@@ -203,9 +203,9 @@ $formReg->isValid();
 my $e = $formReg->errors;
 
 ok( 2 eq keys %$e, 'Errors 1' );
-ok( 'too short' eq $e->{'password'}->[0][0], 'Errors 2' );
-ok( 'does not valid' eq $e->{'password'}->[0][1], 'Errors 3' );
-ok( 'does not valid' eq $e->{'password2'}->[0][0], 'Errors 4' );
+ok( 'Length must be between %d and %d' eq $e->{password} ->[0][0], 'Errors 2' );
+ok( 'Value must have %s like %s'       eq $e->{password} ->[0][1], 'Errors 3' );
+ok( 'Value must have %s like %s'       eq $e->{password2}->[0][0], 'Errors 4' );
 
 $a = $formReg->render();
 

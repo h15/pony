@@ -1,6 +1,8 @@
 package Pony::View::Form::Validator::Length;
 use Pony::Object qw/Pony::View::Form::Validator/;
     
+    use Pony::View::Form::Translate;
+    
     has min => '';
     has max => '';
     
@@ -23,11 +25,12 @@ use Pony::Object qw/Pony::View::Form::Validator/;
         {
             my $this = shift;
             my $data = shift;
-            
+            my $t    = new Pony::View::Form::Translate;
             my $len  = length $data;
+            my $tpl  = 'Length must be between %d and %d';
             
-            return 'too short' if $this->min > $len;
-            return 'too long'  if $len > $this->max;
+            return $t->t($tpl, $this->min, $this->max) if $this->min > $len;
+            return $t->t($tpl, $this->min, $this->max) if $len > $this->max;
             
             return undef;
         }

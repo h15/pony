@@ -1,6 +1,8 @@
 package Pony::View::Form::Validator::Like;
 use Pony::Object qw/Pony::View::Form::Validator/;
     
+    use Pony::View::Form::Translate;
+    
     has regexp => '';
     
     # Get validator's params
@@ -22,9 +24,10 @@ use Pony::Object qw/Pony::View::Form::Validator/;
             my $this = shift;
             my $data = shift;
             my $re   = $this->regexp;
+            my $t    = new Pony::View::Form::Translate;
             
             return undef if $data =~ /$re/;
-            return 'does not like required format';
+            return $t->t('Does not valid required format');
         }
 
 1;

@@ -4,6 +4,8 @@ use Pony::Object;
     # Default decorator.
     # Experimental.
     
+    use Pony::View::Form::Translate;
+    
     has form    => qq{<table class="pony-form">\n\%s\n</table>};
     has element => qq{<tr>\n<td>\%s</td>\n<td>\%s\n\%s</td>\n<td>\%s</td>\n</tr>};
     
@@ -13,14 +15,15 @@ use Pony::Object;
         {
             my ( $this, $formStr, @elements ) = @_;
             my $htmlCode = '';
+            my $t = new Pony::View::Form::Translate;
             
             # Wrap all elements into decorators
             # and join them.
             
             for my $e ( @elements )
             {
-                $htmlCode .= sprintf $this->element,
-                                     @$e{ qw/label value error require/ };
+                $htmlCode .= sprintf $this->element, $t->t( $e->{label} ),
+                                     @$e{ qw/value error require/ };
             }
             
             # Wrap elements into form.

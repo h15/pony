@@ -1,6 +1,8 @@
 package Pony::View::Form::Validator::Have;
 use Pony::Object qw/Pony::View::Form::Validator/;
     
+    use Pony::View::Form::Translate;
+    
     has types => {};
     
     # Get validator's params
@@ -34,6 +36,8 @@ use Pony::Object qw/Pony::View::Form::Validator/;
         {
             my $this = shift;
             my $data = shift;
+            my $tpl  = 'Value must have %s like %s';
+            my $t    = new Pony::View::Form::Translate;
             
             for my $k ( keys %{ $this->types } )
             {
@@ -41,22 +45,26 @@ use Pony::Object qw/Pony::View::Form::Validator/;
                 {
                     when ( 'SPECIAL_CHAR' )
                     {
-                        return 'does not valid' unless $data =~ /[^\w\d]/
+                        return $t->t($tpl, 'special chars', '-,/,!,?')
+                               unless $data =~ /[^\w\d]/
                     }
                     
                     when ( 'DIGITAL' )
                     {
-                        return 'does not valid' unless $data =~ /\d/
+                        return $t->t($tpl, 'digits', '1,2,3')
+                               unless $data =~ /\d/
                     }
                     
                     when ( 'LOWER_CASE' )
                     {
-                        return 'does not valid' unless $data =~ /[a-z]/
+                        return $t->t($tpl, 'latin chars in lower case', 'a,b,c')
+                               unless $data =~ /[a-z]/
                     }
                     
                     when ( 'UPPER_CASE' )
                     {
-                        return 'does not valid' unless $data =~ /[A-Z]/
+                        return $t->t($tpl, 'latin chars in upper case', 'A,B,C')
+                               unless $data =~ /[A-Z]/
                     }
                     
                     default { next }
