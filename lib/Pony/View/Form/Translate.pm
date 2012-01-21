@@ -14,15 +14,19 @@ use Pony::Object qw/singleton/;
         {
             my $this = shift;
             my $word = shift;
-            my $l    = $this->Lexicon->{ $this->lang };
             
-            if ( exists $l->{$word} )
+            if ( defined $this->lang )
             {
-                # Translate params.
-                my @w = map { exists $l->{$_} ? $l->{$_} : $_ } @_;
+                my $l = $this->Lexicon->{ $this->lang };
                 
-                # Translate phrase.
-                return sprintf $l->{$word}, @w;
+                if ( exists $l->{$word} )
+                {
+                    # Translate params.
+                    my @w = map { exists $l->{$_} ? $l->{$_} : $_ } @_;
+                    
+                    # Translate phrase.
+                    return sprintf $l->{$word}, @w;
+                }   
             }
             
             return $word;

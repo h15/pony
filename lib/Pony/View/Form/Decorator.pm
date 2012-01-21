@@ -15,16 +15,11 @@ use Pony::Object;
         {
             my ( $this, $formStr, @elements ) = @_;
             my $htmlCode = '';
-            my $t = new Pony::View::Form::Translate;
             
             # Wrap all elements into decorators
             # and join them.
             
-            for my $e ( @elements )
-            {
-                $htmlCode .= sprintf $this->element, $t->t( $e->{label} ),
-                                     @$e{ qw/value error require/ };
-            }
+            $htmlCode .= $this->decorateElement($_) for @elements;
             
             # Wrap elements into form.
             # Wrap form into from decorator.
@@ -33,6 +28,16 @@ use Pony::Object;
             $htmlCode = sprintf $formStr, $htmlCode;
             
             return $htmlCode;
+        }
+    
+    sub decorateElement
+        {
+            my $this = shift;
+            my $e    = shift;
+            my $t    = new Pony::View::Form::Translate;
+            
+            sprintf $this->element, $t->t( $e->{label} ),
+                    @$e{ qw/value error require/ };
         }
 1;
 
