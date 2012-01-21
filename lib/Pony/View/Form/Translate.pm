@@ -14,7 +14,7 @@ use Pony::Object qw/singleton/;
         {
             my $this = shift;
             my $word = shift;
-            my $l    = $this->Lexicon->{lang};
+            my $l    = $this->Lexicon->{ $this->lang };
             
             if ( exists $l->{$word} )
             {
