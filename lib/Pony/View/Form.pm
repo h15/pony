@@ -2,6 +2,7 @@ package Pony::View::Form;
 use Pony::Object;
 use Pony::Stash;
 use Pony::View::Form::Decorator;
+use Pony::View::Form::Translate;
 
     # " - Boy, it's lucky you have these compartments.
     #   - I use them for smuggling.
@@ -77,6 +78,7 @@ use Pony::View::Form::Decorator;
             my @elements;
             my $formStr = qq{<form action="\%s" method="\%s" id="\%s" \%s>\n\%s\n</form>};
             my $attrStr = '';
+            my $t = new Pony::View::Form::Translate;
             
             # Attribute's hash to string.
 
@@ -98,6 +100,11 @@ use Pony::View::Form::Decorator;
                 
                 if ( @{ $e->errors } )
                 {
+                    # Translate errors.
+                    #
+                    
+                    @{ $e->errors } = map { $t->t($_) } @{ $e->errors };
+                    
                     $errorStr = join '</li><li>', @{ $e->errors };
                     $errorStr = '<div class="error"><ul class=error><li>'
                               . $errorStr . '</li></ul></div>';
