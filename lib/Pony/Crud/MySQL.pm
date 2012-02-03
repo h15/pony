@@ -47,7 +47,9 @@ use Pony::Crud::Dbh::MySQL;
             my $this = shift;
             my ( $w, $f ) = @_;
             
-            [ $this->list( $w, $f, undef, undef, 0, 1 ) ]->[0];
+            my ( $order ) = keys %$w;
+            
+            [ $this->list( $w, $f, $order, undef, 0, 1 ) ]->[0];
         }
 
     # Params : {data}, {where}.
