@@ -1,6 +1,6 @@
-package Pony::Crud::MySQL;
+package Pony::Model::Crud::MySQL;
 use Pony::Object;
-use Pony::Crud::Dbh::MySQL;
+use Pony::Model::Dbh::MySQL;
 
     has table => undef;
 
@@ -19,7 +19,7 @@ use Pony::Crud::Dbh::MySQL;
         {
             my $this = shift;
             my $data = shift;
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             while ( my ( $k, $v ) = each %$data )
             {
@@ -58,7 +58,7 @@ use Pony::Crud::Dbh::MySQL;
         {
             my $this = shift;
             my ( $data, $where ) = @_;
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Prepare
             #
@@ -82,7 +82,7 @@ use Pony::Crud::Dbh::MySQL;
         {
             my $this  = shift;
             my $where = shift;
-            my $dbh   = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh   = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Prepare WHERE condition.
             #
@@ -104,7 +104,7 @@ use Pony::Crud::Dbh::MySQL;
         {
             my $this  = shift;
             my ( $where, $fields, $order, $rule, $offset, $limit ) = @_;
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Define default values
             #
@@ -146,7 +146,7 @@ use Pony::Crud::Dbh::MySQL;
         {
             my $this  = shift;
             my ( $where ) = @_;
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Prepare
             #
@@ -170,7 +170,7 @@ use Pony::Crud::Dbh::MySQL;
         {
             my $this  = shift;
             my $query = shift;
-            my $dbh   = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh   = Pony::Model::Dbh::MySQL->new->dbh;
             
             # Run request and return result.
             #
@@ -190,7 +190,7 @@ use Pony::Crud::Dbh::MySQL;
         {
             my $this = shift;
             my $data = shift;
-            my $dbh  = Pony::Crud::Dbh::MySQL->new->dbh;
+            my $dbh  = Pony::Model::Dbh::MySQL->new->dbh;
             my @data;
             
             while ( my ( $k, $v ) = each %$data )
