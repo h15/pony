@@ -1,4 +1,4 @@
-package Pony::View::Form::Translate;
+package Pony::View::Translate;
 use Pony::Object qw/singleton/;
 
     has Lexicon => {};

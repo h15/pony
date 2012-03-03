@@ -4,7 +4,7 @@ use Pony::Object;
     # Default decorator.
     # Experimental.
     
-    use Pony::View::Form::Translate;
+    use Pony::View::Translate;
     
     has form    => qq{<table class="pony-form">\n\%s\n</table>};
     has element => qq{<tr>\n<td>\%s</td>\n<td>\%s\n\%s</td>\n<td>\%s</td>\n</tr>};
@@ -34,7 +34,7 @@ use Pony::Object;
         {
             my $this = shift;
             my $e    = shift;
-            my $t    = new Pony::View::Form::Translate;
+            my $t    = new Pony::View::Translate;
             
             sprintf $this->element, $t->t( $e->{label} ),
                     @$e{ qw/value error require/ };
