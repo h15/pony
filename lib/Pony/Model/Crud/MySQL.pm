@@ -47,6 +47,10 @@ use Pony::Model::Dbh::MySQL;
             my $this = shift;
             my ( $w, $f ) = @_;
             
+            # If where param is not hash.
+            ( $w, $f ) = ( {$w, $f}, undef ) if ref $w ne 'HASH';
+            
+            # ORDER BY first where param.
             my ( $order ) = keys %$w;
             
             [ $this->list( $w, $f, $order, undef, 0, 1 ) ]->[0];
