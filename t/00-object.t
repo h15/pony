@@ -6,7 +6,7 @@ use lib './t';
 use strict;
 use warnings;
 
-use Test::More tests => 54;
+use Test::More tests => 55;
 
 use_ok 'Pony::Object';
 use_ok 'Data::Dumper';
@@ -177,6 +177,16 @@ package main;
     
     ok( 'a' eq $all->{a}, 'Check ALL property 4' );
     ok( 'hh'eq $all->{h}, 'Check ALL property 5' );
+    
+    # Copy object
+    #
+    
+    my $copyObj1 = new Object::FirstPonyClass;
+    my $copyObj2 = $copyObj1;#->clone();
+    
+    $copyObj1->a = 'j';
+    say dump $copyObj2;
+    ok( $copyObj2->a eq 'a', 'Test object copy' );
     
     diag( "Testing Pony::Object $Pony::Object::VERSION" );
     

@@ -44,13 +44,15 @@ sub import
         # Define special methods.
         #
         
-        *{$call.'::has' } = sub { addAttr ($call, @_) };
-        *{$call.'::ALL' } = sub { \%{ $call.'::ALL' } };
-        *{$call.'::dump'} = sub {
+        *{$call.'::has'  } = sub { addAttr ($call, @_) };
+        *{$call.'::ALL'  } = sub { \%{ $call.'::ALL' } };
+        *{$call.'::clone'} = sub { dclone shift };
+        *{$call.'::dump' } = sub {
                                     use Data::Dumper;
                                     $Data::Dumper::Indent = 1;
                                     Dumper(@_);
-                                };
+                                 };
+        
         *{$call.'::new'} = sub
         {
             # For singletons.
