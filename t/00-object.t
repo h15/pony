@@ -6,7 +6,7 @@ use lib './t';
 use strict;
 use warnings;
 
-use Test::More tests => 55;
+use Test::More tests => 57;
 
 use_ok 'Pony::Object';
 use_ok 'Data::Dumper';
@@ -182,11 +182,19 @@ package main;
     #
     
     my $copyObj1 = new Object::FirstPonyClass;
-    my $copyObj2 = $copyObj1;#->clone();
+    my $copyObj2 = $copyObj1->clone();
     
     $copyObj1->a = 'j';
-    say dump $copyObj2;
+    
     ok( $copyObj2->a eq 'a', 'Test object copy' );
+    
+    # toHash
+    #
+    
+    my $hash = $copyObj1->toHash();
+    
+    ok( $hash->{d} eq 'd', 'Test toHash 1' );
+    ok( $hash->{a} eq 'j', 'Test toHash 2' );
     
     diag( "Testing Pony::Object $Pony::Object::VERSION" );
     

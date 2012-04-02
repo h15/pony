@@ -4,7 +4,7 @@ use feature ':5.10';
 use Storable qw/dclone/;
 use Module::Load;
 
-our $VERSION = '0.001002';
+our $VERSION = '0.001003';
 
 # "You will never find a more wretched hive of scum and villainy.
 #  We must be careful."
@@ -44,14 +44,22 @@ sub import
         # Define special methods.
         #
         
-        *{$call.'::has'  } = sub { addAttr ($call, @_) };
-        *{$call.'::ALL'  } = sub { \%{ $call.'::ALL' } };
-        *{$call.'::clone'} = sub { dclone shift };
-        *{$call.'::dump' } = sub {
+        *{$call.'::has'   } = sub { addAttr ($call, @_) };
+        *{$call.'::ALL'   } = sub { \%{ $call.'::ALL' } };
+        *{$call.'::clone' } = sub { dclone shift };
+        
+        *{$call.'::toHash'} = sub
+        {
+            my $this = shift;
+            my %hash = map { $_, $this->{$_} } keys %{ $this->ALL() };
+              \%hash;
+        };
+        
+        *{$call.'::dump'  } = sub {
                                     use Data::Dumper;
                                     $Data::Dumper::Indent = 1;
                                     Dumper(@_);
-                                 };
+                                  };
         
         *{$call.'::new'} = sub
         {
