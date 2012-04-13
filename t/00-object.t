@@ -196,5 +196,11 @@ package main;
     ok( $hash->{d} eq 'd', 'Test toHash 1' );
     ok( $hash->{a} eq 'j', 'Test toHash 2' );
     
+    use Object::Attr;
+    
+    my $objAttr = new Object::Attr;
+    $objAttr->setX(1);
+    say $objAttr->x;
+    
     diag( "Testing Pony::Object $Pony::Object::VERSION" );
     

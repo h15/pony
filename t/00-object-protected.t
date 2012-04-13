@@ -3,39 +3,23 @@
 use strict;
 use warnings;
 
+use lib './lib';
+use lib './t';
+
 use Test::More tests => 54;
 
 use_ok 'Pony::Object';
 
-package ProtectedPony;
 use Pony::Object;
+use Object::ProtectedPony;
 
-    protected a => 'a';
-    public    b => 'b';
-    protected c => undef;
-    
-    sub getA
-        {
-            return shift->_getA();
-        }
-    
-    sub setA
-        {
-            shift->a = shift;
-        }
-    
-     sub _getA : protected
-        {
-            return shift->a;
-        }
-
-1;
-
-package main;
-
-    my $p = new ProtectedPony;
-    
-    eval { $p->a = 1 };
+    my $p = new Object::ProtectedPony;
+    #$p->_a = 1;
+    #say $p->_a;
+    $p->setA(1);
+    say $p->getA();
+__END__
+    eval { $p->_a = 1 };
     ok( $@ ne undef, 'Test protected property');
     
     eval { $p->_getA() };
@@ -47,3 +31,5 @@ package main;
     $p->setA(1);
     
     ok( $p->getA() eq 1, 'Change protected property');
+
+1;

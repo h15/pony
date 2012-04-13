@@ -3,6 +3,8 @@
 use strict;
 use warnings;
 
+use lib './t';
+
 use Benchmark;
 use Object::Benchmark::BlessedRef;
 use Object::Benchmark::Pony;
