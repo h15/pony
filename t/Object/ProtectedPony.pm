@@ -1,25 +1,51 @@
 package Object::ProtectedPony;
 use Pony::Object;
 
-    has _a => 'a';
-    has  b => 'b';
-    has _c => undef;
+    protected a => 'a';
+    public    b => 'b';
+    protected c => undef;
+    private   d => 0xDEAD;
     
-    sub getA
-        {
-            return shift->_getA();
-        }
-    
-    sub setA
+    sub getA : Public
         {
             my $this = shift;
-            $this->_a = shift;
+            return $this->_getA();
         }
     
-    has _getA => sub
+    sub setA : Public
         {
-            return shift->_a;
-        };
-
+            my $this = shift;
+            $this->a = shift;
+        }
+    
+    sub _getA : Protected
+        {
+            my $this = shift;
+            return $this->a;
+        }
+    
+    sub sum : Public
+        {
+            my $this = shift;
+            $this->c = $this->a + $this->b;
+        }
+    
+    sub getC : Public
+        {
+            my $this = shift;
+            return $this->c;
+        }
+    
+    sub magic : Public
+        {
+            my $this = shift;
+            return ( $this->d ^ $this->c );
+        }
+    
+    sub __doNothing
+        {
+            1 + 1 == 2
+        }
+    
 1;
 

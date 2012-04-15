@@ -6,17 +6,15 @@ use Pony::Object;
     has d => 'd';
     
     # method
-    has b => sub
+    sub b
         {
             my $this = shift;
                $this->a = 'b';
                
-            return ( @_ ?
-                        shift:
-                        'b'  );
-        };
+            return ( @_ ? shift : 'b' );
+        }
 
-    # traditional perl method
+    # one more perl method
     sub c { 'c' }
 
 1;

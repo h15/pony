@@ -1,7 +1,7 @@
 package Object::ProtectedPony2;
 use Pony::Object;
 
-    has a => 'a';
+    has __a => 'a';
     has _b  => 'b';
     has __c => 'c';
     
@@ -20,13 +20,13 @@ use Pony::Object;
     sub _getA : Protected
         {
             my $this = shift;
-            return $this->a;
+            return $this->_a;
         }
     
     sub __setA : Private
         {
             my $this = shift;
-            $this->a = shift;
+            $this->_a = shift;
         }
     
 1;

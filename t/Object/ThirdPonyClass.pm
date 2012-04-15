@@ -3,3 +3,4 @@ package Object::ThirdPonyClass;
 use Pony::Object qw/Object::SecondPonyClass Object::FirstPonyClass/;
 
 1;
+

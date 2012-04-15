@@ -6,3 +6,4 @@ use Pony::Object singleton => qw/Object::FirstPonyClass
     has h => 'h';
 
 1;
+

@@ -7,7 +7,7 @@ use Carp qw(confess);
 use Scalar::Util 'blessed';
 use Attribute::Handlers;
 
-our $VERSION = '0.001005';
+our $VERSION = '0.001997';
 
 # "You will never find a more wretched hive of scum and villainy.
 #  We must be careful."
@@ -52,13 +52,16 @@ sub import
         # Define "keywords".
         #
         
-        *{$call.'::has'} = sub { addProperty($call, @_) };
+        *{$call.'::has'}       = sub { addProperty ($call, @_) };
+        *{$call.'::public'}    = sub { addPublic   ($call, @_) };
+        *{$call.'::private'}   = sub { addPrivate  ($call, @_) };
+        *{$call.'::protected'} = sub { addProtected($call, @_) };
         
         # Define special methods.
         #
         
-        *{$call.'::ALL'   } = sub { \%{ $call.'::ALL' } };
-        *{$call.'::clone' } = sub { dclone shift };
+        *{$call.'::ALL'}    = sub { \%{ $call.'::ALL' } };
+        *{$call.'::clone'}  = sub { dclone shift };
         *{$call.'::toHash'} = sub
         {
             my $this = shift;
@@ -66,11 +69,11 @@ sub import
               \%hash;
         };
         
-        *{$call.'::dump'  } = sub {
+        *{$call.'::dump'} = sub {
                                     use Data::Dumper;
                                     $Data::Dumper::Indent = 1;
                                     Dumper(@_);
-                                  };
+                                };
         
         *{$call.'::new'} = sub
         {
@@ -132,13 +135,7 @@ sub addPublic
     {
         my ( $this, $attr, $value ) = @_;
         
-        # methods
-        if ( ref $value eq 'CODE' )
-        {
-            *{$this."::$attr"} = $value;
-            return;
-        }
-        
+        # Save pair (property name => default value)
         %{ $this.'::ALL' } = ( %{ $this.'::ALL' }, $attr => $value );
         
         *{$this."::$attr"} = sub : lvalue { my $this = shift; $this->{$attr} };
@@ -148,13 +145,7 @@ sub addProtected
     {
         my ( $this, $attr, $value ) = @_;
         
-        # methods
-        if ( ref $value eq 'CODE' )
-        {
-            *{$this."::$attr"} = $value;
-            return;
-        }
-        
+        # Save pair (property name => default value)
         %{ $this.'::ALL' } = ( %{ $this.'::ALL' }, $attr => $value );
         
         *{$this."::$attr"} = sub : lvalue
@@ -172,14 +163,8 @@ sub addPrivate
     {
         my ( $this, $attr, $value ) = @_;
         
-        # methods
-        if ( ref $value eq 'CODE' )
-        {
-            *{$this."::$attr"} = $value;
-            return;
-        }
-        
-        #%{ $this.'::ALL' } = ( %{ $this.'::ALL' }, $attr => $value );
+        # Save pair (property name => default value)
+        %{ $this.'::ALL' } = ( %{ $this.'::ALL' }, $attr => $value );
         
         *{$this."::$attr"} = sub : lvalue
         {
