@@ -7,7 +7,7 @@ use Carp qw(confess);
 use Scalar::Util 'blessed';
 use Attribute::Handlers;
 
-our $VERSION = '0.001997';
+our $VERSION = '0.001998';
 
 # "You will never find a more wretched hive of scum and villainy.
 #  We must be careful."
@@ -99,10 +99,8 @@ sub import
                         {
                             %{ $this.'::ALL' } = ( %{ $this.'::ALL' },
                                                    $k => $all->{$k} );
-                        } 
-
+                        }
                     }
-
                 }
             }
             
@@ -143,36 +141,30 @@ sub addPublic
 
 sub addProtected
     {
-        my ( $this, $attr, $value ) = @_;
+        my ( $pkg, $attr, $value ) = @_;
         
         # Save pair (property name => default value)
-        %{ $this.'::ALL' } = ( %{ $this.'::ALL' }, $attr => $value );
+        %{ $pkg.'::ALL' } = ( %{ $pkg.'::ALL' }, $attr => $value );
         
-        *{$this."::$attr"} = sub : lvalue
+        *{$pkg."::$attr"} = sub : lvalue
         {
             my $this = shift;
-            my $pkg = ref $this;
-            
             confess "Protected ${pkg}::$attr called" unless caller->isa($pkg);
-            
             $this->{$attr};
         };
     }
 
 sub addPrivate
     {
-        my ( $this, $attr, $value ) = @_;
+        my ( $pkg, $attr, $value ) = @_;
         
         # Save pair (property name => default value)
-        %{ $this.'::ALL' } = ( %{ $this.'::ALL' }, $attr => $value );
+        %{ $pkg.'::ALL' } = ( %{ $pkg.'::ALL' }, $attr => $value );
         
-        *{$this."::$attr"} = sub : lvalue
+        *{$pkg."::$attr"} = sub : lvalue
         {
             my $this = shift;
-            my $pkg = ref $this;
-            
             confess "Private ${pkg}::$attr called" unless caller eq $pkg;
-            
             $this->{$attr};
         };
     }

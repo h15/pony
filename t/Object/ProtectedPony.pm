@@ -42,7 +42,7 @@ use Pony::Object;
             return ( $this->d ^ $this->c );
         }
     
-    sub __doNothing
+    sub __doNothing : Private
         {
             1 + 1 == 2
         }
