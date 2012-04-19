@@ -164,7 +164,8 @@ sub addPrivate
         *{$pkg."::$attr"} = sub : lvalue
         {
             my $this = shift;
-            confess "Private ${pkg}::$attr called" unless caller eq $pkg;
+            my $call = caller;
+            confess "Private ${pkg}::$attr called" unless $call eq $pkg || $pkg->isa($call);
             $this->{$attr};
         };
     }
