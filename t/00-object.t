@@ -5,30 +5,43 @@ use lib './t';
 
 use strict;
 use warnings;
+use feature ':5.10';
 
-use Test::More tests => 57;
+use Test::More tests => 67;
 
 use_ok 'Pony::Object';
 use_ok 'Data::Dumper';
 
-use Pony::Object;
+# For simple tests.
 use Object::FirstPonyClass;
 use Object::SecondPonyClass;
 use Object::ThirdPonyClass;
 use Object::FourthPonyClass;
+
+# Singletons.
 use Object::Singleton;
 use Object::SingletonExt;
+
+# Deep copy tests.
 use Object::DeepCopy;
 use Object::DeepCopyExt;
 use Object::DeepCopyExtExt;
 
-package main;
+# Test protected, private, public
+# methods and properties.
+use Object::ProtectedPony;
+use Object::ProtectedPonyExt;
+
+
+    #======================
+    #   RUN SIMPLE TESTS
+    #======================
+    
     
     # Stand alone class.
     #
     
     my $c1 = new Object::FirstPonyClass;
-    #say dump $c1;die;
     
     ok( 'a' eq $c1->a, 'Property default value' );
     ok( 'd' eq $c1->d );
@@ -77,8 +90,11 @@ package main;
     ok( 'b' eq $c4->b, 'Method inheritance in multiple inheritance 2' );
     ok( 'b' eq $c4->a, 'Change property in method ... and again 2' );
     
-    # Singleton.
-    #
+    
+    #================
+    #   SINGLETONS
+    #================
+    
     
     my $s1 = new Object::Singleton;
     ok( 'a' eq $s1->a );
@@ -101,8 +117,11 @@ package main;
     ok( 'a' eq $s4->a, 'extends Singleton is not singleton' );
     ok( 'hh'eq $s4->h, 'extends Singleton polymorphism' );
     
-    # Deep copy
-    #
+    
+    #===============
+    #   Deep copy
+    #===============
+    
     
     my $w1 = new Object::DeepCopy;
     my $w2 = new Object::DeepCopy;
@@ -160,6 +179,12 @@ package main;
     ok( $dcee1->struct->{group}->{item2}->{foo}
         eq "value", 'Deep Copy inh inh 5' );
     
+    
+    #=====================
+    #   SPECIAL METHODS
+    #=====================
+    
+    
     # ALL
     #
     
@@ -196,11 +221,52 @@ package main;
     ok( $hash->{d} eq 'd', 'Test toHash 1' );
     ok( $hash->{a} eq 'j', 'Test toHash 2' );
     
-    use Object::Attr;
     
-    my $objAttr = new Object::Attr;
-    $objAttr->setX(1);
-    say $objAttr->x;
+    #====================================
+    #   Access attributes, properties.
+    #====================================
+    
+    
+    my $p = new Object::ProtectedPony;
+    
+    eval { $p->a = 1 };
+    ok( defined $@, 'Test protected property' );
+    
+    eval { $p->_getA() };
+    ok( defined $@, 'Test protected method' );
+    
+    $p->setA(1);
+    $a = $p->getA();
+    ok( $a eq '1', 'Change protected property via public method' );
+    
+    $p->b = 2;
+    $p->sum();
+    ok( $p->getC eq 3 );
+    
+    my $magic = $p->magic();
+    ok( $magic eq 57006 );
+
+#
+
+    my $pe = new Object::ProtectedPonyExt;
+    
+    eval { $pe->a = 1 };
+    ok( defined $@, 'Test protected property 2' );
+    
+    eval { $pe->_getA() };
+    ok( defined $@, 'Test protected method 2' );
+    
+    $pe->setA(1);
+    $a = $pe->getA();
+    ok( $a eq '1', 'Change protected property via public method 2' );
+    
+    $pe->b = 2;
+    $pe->sum();
+    ok( $pe->getC eq 3 );
+    
+    $magic = $pe->magic(); 
+    ok( $magic eq 48876 );
+
     
     diag( "Testing Pony::Object $Pony::Object::VERSION" );
-    
+
