@@ -19,7 +19,8 @@ At a first, you should to install required modules:
 
 =head3 Pony::Object
 
-What it can?
+What it can? Now it's replaced in personal repo. You can find C<Pony::Object>
+here: https://github.com/h15/pony-object.
 
 =over
 

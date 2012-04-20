@@ -14,10 +14,9 @@ my $dir = getcwd;
 
 test_requires "Test::More" => 0.92;
 
-all_from "$dir/lib/Pony/Object.pm";
+all_from "$dir/lib/Pony";
 
 no_index directory => 'examples';
-no_index directory => 'inc';
 no_index directory => 'script';
 no_index directory => 't';
 
