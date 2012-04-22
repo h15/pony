@@ -1,0 +1,168 @@
+OVERVIEW
+    Pony is a module set, which make Perl more comfirtable for modern
+    development.
+
+  How to install
+    At a first, you should to install required modules:
+
+    for Pony::Crud::Dbh::MySQL
+            sudo cpan DBI
+
+  More info about some modules
+   Pony::Object
+    What it can? Now it's replaced in personal repo. You can find
+    "Pony::Object" here: https://github.com/h15/pony-object.
+
+    strict and modern
+        It's turning on strict mode and enable to use perl features from
+        v5.10
+
+    has New key word "has" for define class property or method if values is
+        subroutine ref.
+
+            has name => 'Joe';
+
+    debug
+        You can see data struct via 'dump' function.
+
+            say dump { [ qw/perl rocks !/ ] }
+
+    ALL "ALL" hash consists class default properties. You can get that via
+        "ALL" method.
+
+    inheritance
+        As many other systems Pony::Object support inheritance too.
+
+            package A;
+            use Pony::Object;
+        
+                sub dontDoIt
+                    {
+                        say 'O`key!';
+                    }
+    
+                sub doIt
+                    {
+                        say 'Not today; Sorry...';
+                    }
+            1;
+    
+            package B;
+            use Pony::Object qw(A);
+    
+                sub doIt
+                    {
+                        say 'Sure!';
+                    }
+            1;
+    
+            package C;
+            use Pony::Object qw(B A);
+    
+            1;
+
+    singleton
+        If your class will be inheritance "singleton" you will get singleton
+        class.
+
+            package Alone;
+            use Pony::Object 'singleton'
+    
+                has someResource => undef;
+    
+            1;
+
+    new "new"
+        New method is already written. If you wanna do smth. on object
+        initialization - use method "init". It will be called in the end of
+        "new".
+
+   Pony::Stash
+    It's a little stash with some data ^_^ It's a singleton.
+
+    How to start
+            use Pony::Stash;
+    
+            # Initialize with value.
+            Pony::Stash->new('../resources/config.dat');
+    
+            # or
+            my $conf = new Pony::Stash('../resources/config.dat');
+    
+            # ReInitialize
+            Pony::Stash->new->init('../resources/config.dat');
+    
+            # or
+            $conf->init('../resources/config.dat');
+
+    Method "save"
+        Save stash value into file.
+
+            Pony::Stash->save;
+
+    Method "findOrCreate"
+        Find value into stash or create it. And return it.
+
+            my $u = Pony::Stash->findOrCreate
+                    ( user => { table => 'users', default => 'anonymous' } );
+
+    Methods "get" and "set"
+            Pony::Stash->set ( user => { table => 'users', default => 'anonymous' } );
+    
+            my $u = Pony::Stash->get('user');
+
+    Method "delete"
+        Remove value from stash.
+
+            Pony::Stash->delete('user');
+
+   Pony::Crud::MySQL
+    Method "create"
+        Create record into database.
+
+            my $userModel = new Pony::Crud::MySQL('pony_test_table_user');
+    
+            # Params : {data} - data for new record.
+            # Returns: id of new record.
+            my $id = $userModel->create({mail => q[gosha.bugov@lorcode.org]});
+
+        'pony_test_table_user' is a name of table, which will used for new
+        model.
+
+    Method "read"
+            # Params : {where}(?), [fields](?).
+            # Returns: hash ref.
+            my $user = $userModel->read( {id => $id}, ['mail'] );
+
+    Method "update"
+            # Params : {data}, {where}.
+            # Returns: true || false.
+            $userModel->update({mail => 'user@example.com'} , {id => $id});
+
+    Method "delete"
+            # Params : {where}.
+            # Returns: true || false.
+            $userModel->update({id => $id});
+
+    Method "list"
+            # Params : {where}(?), [fields](?), order(?), rule(?), offset(?), limit(?).
+            # Returns: array of hash refs.
+            my @users = $userModel->list({status => 0}, undef, 'id', 'ASC', 5_000, 10 );
+
+    Method "count"
+            # Params : {where}(?).
+            # Returns: integer.
+            my $count = $userModel->count();
+
+    Method "raw"
+            # Params : query.
+            # Returns: array of hashes.
+            my @hashes = $userModel->raw( "SELECT * FROM `pony_test_table_user`
+                                                    WHERE `name` LIKE 'A%'" );
+
+COPYRIGHT AND LICENSE
+    Copyright (C) 2011, Georgy Bazhukov.
+
+    This program is free software, you can redistribute it and/or modify it
+    under the terms of the Artistic License version 2.0.
+

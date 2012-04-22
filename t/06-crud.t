@@ -4,15 +4,14 @@ use lib './lib';
 use Test::More tests => 3;
 
 use_ok 'Pony::Object';
-use_ok 'Pony::Crud::Dbh::MySQL';
-use_ok 'Pony::Crud::MySQL';
+use_ok 'Pony::Model::Dbh::MySQL';
+use_ok 'Pony::Model::Crud::MySQL';
 
 use Pony::Object;
-use Pony::Crud::Dbh::MySQL;
-use Pony::Crud::MySQL;
+use Pony::Model::Dbh::MySQL;
+use Pony::Model::Crud::MySQL;
 
 __END__
-
 my $auth =  {
                 host     => 'localhost',
                 dbname   => 'pony',
@@ -20,9 +19,9 @@ my $auth =  {
                 password => 'pony secret'
             };
 
-Pony::Crud::Dbh::MySQL->new( $auth );
-my $dbh = new Pony::Crud::Dbh::MySQL;
-   $dbh->dbh->do("drop table `pony_test_table_user`");
+Pony::Model::Dbh::MySQL->new( $auth );
+my $dbh = new Pony::Model::Dbh::MySQL;
+   $dbh->dbh->do("drop table if exists `pony_test_table_user`");
    $dbh->dbh->do( q{
                     create table `pony_test_table_user`
                     (
@@ -32,7 +31,7 @@ my $dbh = new Pony::Crud::Dbh::MySQL;
                     )
                    });
 
-my $userModel = new Pony::Crud::MySQL('pony_test_table_user');
+my $userModel = new Pony::Model::Crud::MySQL('pony_test_table_user');
 my $id   = $userModel->create({mail => q[gosha.bugov@lorcode.org']});
 
 ok ( $id eq '1', 'last insert id' );

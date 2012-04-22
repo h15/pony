@@ -1,3 +1,8 @@
+package Pony;
+
+our $VERSION = 0.02;
+
+__END__
 
 =head1 OVERVIEW
 

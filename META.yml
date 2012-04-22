@@ -1,28 +1,93 @@
 ---
-abstract: 'Pony modules for web'
+abstract: "web developer's libs"
 author:
-  - 'Georgy Bazhukov <gosha.bugov@gmail.com>'
+  - 'Georgy Bazhukov <gosha@bugov.net>'
 build_requires:
-  ExtUtils::MakeMaker: 6.42
-  Test::More: 0.96
+  Test::More: 0
 configure_requires:
-  ExtUtils::MakeMaker: 6.42
-distribution_type: module
-generated_by: 'Module::Install version 1.00'
+  Module::Build: 0.4
+dynamic_config: 1
+generated_by: 'Module::Build version 0.4, CPAN::Meta::Converter version 2.110440'
+keywords:
+  - web
+  - framework
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Pony
-no_index:
-  directory:
-    - examples
-    - inc
-    - t
-    - script
+provides:
+  Pony:
+    file: lib/Pony.pm
+    version: 0.02
+  Pony::Model::Crud::Interface:
+    file: lib/Pony/Model/Crud/Interface.pm
+    version: 0
+  Pony::Model::Crud::MySQL:
+    file: lib/Pony/Model/Crud/MySQL.pm
+    version: 0
+  Pony::Model::Crud::SQLite:
+    file: lib/Pony/Model/Crud/SQLite.pm
+    version: 0
+  Pony::Model::Dbh::MySQL:
+    file: lib/Pony/Model/Dbh/MySQL.pm
+    version: 0
+  Pony::Model::Dbh::SQLite:
+    file: lib/Pony/Model/Dbh/SQLite.pm
+    version: 0
+  Pony::Stash:
+    file: lib/Pony/Stash.pm
+    version: 0.02
+  Pony::View::Form:
+    file: lib/Pony/View/Form.pm
+    version: 0.000004
+  Pony::View::Form::Decorator:
+    file: lib/Pony/View/Form/Decorator.pm
+    version: 0
+  Pony::View::Form::Element:
+    file: lib/Pony/View/Form/Element.pm
+    version: 0
+  Pony::View::Form::Element::Checkbox:
+    file: lib/Pony/View/Form/Element/Checkbox.pm
+    version: 0
+  Pony::View::Form::Element::Hidden:
+    file: lib/Pony/View/Form/Element/Hidden.pm
+    version: 0
+  Pony::View::Form::Element::Password:
+    file: lib/Pony/View/Form/Element/Password.pm
+    version: 0
+  Pony::View::Form::Element::Select:
+    file: lib/Pony/View/Form/Element/Select.pm
+    version: 0
+  Pony::View::Form::Element::Submit:
+    file: lib/Pony/View/Form/Element/Submit.pm
+    version: 0
+  Pony::View::Form::Element::Text:
+    file: lib/Pony/View/Form/Element/Text.pm
+    version: 0
+  Pony::View::Form::Element::Textarea:
+    file: lib/Pony/View/Form/Element/Textarea.pm
+    version: 0
+  Pony::View::Form::Validator:
+    file: lib/Pony/View/Form/Validator.pm
+    version: 0
+  Pony::View::Form::Validator::Have:
+    file: lib/Pony/View/Form/Validator/Have.pm
+    version: 0
+  Pony::View::Form::Validator::Length:
+    file: lib/Pony/View/Form/Validator/Length.pm
+    version: 0
+  Pony::View::Form::Validator::Like:
+    file: lib/Pony/View/Form/Validator/Like.pm
+    version: 0
+  Pony::View::Translate:
+    file: lib/Pony/View/Translate.pm
+    version: 0
 requires:
-  perl: 5.10.1
+  Carp: 0
+  Storable: 0
+  perl: 5.010
 resources:
   license: http://dev.perl.org/licenses/
-  repository: git://github.com/h15/pony.git
-version: 0.0.2
+  repository: https://github.com/h15/pony
+version: 0.02
