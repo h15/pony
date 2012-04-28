@@ -36,7 +36,7 @@ use Pony::Object 'singleton';
         {
             my $this = shift->new;
             
-            open  F, '>', $this->file warn 'Can`t write into ' . $this->file;
+            open  F, '>', $this->file or warn 'Can`t write into ' . $this->file;
             print F freeze($this->conf);
             close F;
         }
