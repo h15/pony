@@ -36,7 +36,7 @@ use Pony::Object 'singleton';
         {
             my $this = shift->new;
             
-            open  F, '>', $this->file or warn 'Can\'t write into ' . $this->file;
+            open  F, '>', $this->file or warn 'Can\'t write into '.$this->file;
             print F freeze($this->conf);
             close F;
         }
@@ -143,8 +143,8 @@ If file './config.dat' does not exist - Pony::Stash writes warninig.
 
 =item set
 
-First param is name config or stash's cell (or what you store in the stash).
-Second param is data, which will saved there.
+First param is a name config or stash's cell (or what you store in the stash).
+Second param is a data, which will saved there.
 
     Pony::Stash->new('./config.dat');
     Pony::Stash->set( secret => 'There is no spoon!' );
@@ -184,7 +184,7 @@ Delete pair from stash by key.
 
 =item save
 
-Save all changes into file. Rise warning if file is not writable.
+Save all changes into file. Raise warning if file is not writable.
 
     Pony::Stash->save();
 
