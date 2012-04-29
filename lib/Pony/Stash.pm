@@ -18,7 +18,7 @@ use Pony::Object 'singleton';
             my $this = shift;
                $this->file = shift;
             
-            open F, $this->file or warn 'Can`t read ' . $this->file;
+            open F, $this->file or warn 'Can\'t read ' . $this->file;
             {
                 local $/;
                 
@@ -36,7 +36,7 @@ use Pony::Object 'singleton';
         {
             my $this = shift->new;
             
-            open  F, '>', $this->file or warn 'Can`t write into ' . $this->file;
+            open  F, '>', $this->file or warn 'Can\'t write into ' . $this->file;
             print F freeze($this->conf);
             close F;
         }
@@ -192,7 +192,21 @@ Save all changes into file. Rise warning if file is not writable.
 
 =head2 Tips & Tricks
 
-If you need to use 
+If you need to use two or more stashes, you can initiate it many times.
+
+    use Pony::Stash;
+    
+    # First stash.
+    my $conf = new Pony::Stash('./config.dat');
+       $conf->set( user => { dbTable => 'user',
+                             default => 'anonymous' } );
+    
+    $conf->save;
+    
+    # Second stash.
+    Pony::Stash->new->init('./config2.dat');
+    # $conf changed!
+    my $userConf = $conf->get('user');
 
 =head1 COPYRIGHT AND LICENSE
 

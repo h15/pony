@@ -9,51 +9,51 @@ use_ok 'Pony::Stash';
 use Pony::Object;
 use Pony::Stash;
 
-clean();
+    clean();
 
-{
-    my $conf = new Pony::Stash('./t/03-stash/config.dat');
-       $conf->set( user => { table   => 'users',
-                             default => 'anonymous' } );
-       
-    my $u = $conf->findOrCreate( user => { table => 'u', default => 'anon' } );
-    
-    ok( 'users' eq $u->{table}, 'findOrCreate (find)' );
-    
-    my $a = $conf->findOrCreate( article => { table => 'article' } );
-    
-    ok( 'article' eq $a->{table}, 'findOrCreate (create)' );
-    
-    $a->{table} = 'art';
-    $conf->set( article => $a );
-    $a = $conf->get('article');
-    
-    ok( 'art' eq $a->{table}, 'update via set' );
-}
+    {
+        my $conf = new Pony::Stash('./t/03-stash/config.dat');
+           $conf->set( user => { table   => 'users',
+                                 default => 'anonymous' } );
+           
+        my $u = $conf->findOrCreate( user => { table => 'u', default => 'anon' } );
+        
+        ok( 'users' eq $u->{table}, 'findOrCreate (find)' );
+        
+        my $a = $conf->findOrCreate( article => { table => 'article' } );
+        
+        ok( 'article' eq $a->{table}, 'findOrCreate (create)' );
+        
+        $a->{table} = 'art';
+        $conf->set( article => $a );
+        $a = $conf->get('article');
+        
+        ok( 'art' eq $a->{table}, 'update via set' );
+    }
 
-my $u = Pony::Stash->get('user');
+    my $u = Pony::Stash->get('user');
 
-ok( 'users' eq $u->{table}, 'get from singleton' );
+    ok( 'users' eq $u->{table}, 'get from singleton' );
 
-my $stash = new Pony::Stash;
+    my $stash = new Pony::Stash;
 
-Pony::Stash->save;
-Pony::Stash->new->init('./t/03-stash/stash.dat');
+    Pony::Stash->save;
+    Pony::Stash->new->init('./t/03-stash/stash.dat');
 
-$u = Pony::Stash->findOrCreate( user => { table => 'u', default => 'anon' } );
+    $u = Pony::Stash->findOrCreate( user => { table => 'u', default => 'anon' } );
 
-ok( 'u' eq $u->{table}, 'findOrCreate (create). 2nd stash.' );
+    ok( 'u' eq $u->{table}, 'findOrCreate (create). 2nd stash.' );
 
-Pony::Stash->save;
-Pony::Stash->new->init('./t/03-stash/config.dat');
+    Pony::Stash->save;
+    Pony::Stash->new->init('./t/03-stash/config.dat');
 
-$u = Pony::Stash->findOrCreate( user => { table => 'u', default => 'anon' } );
+    $u = Pony::Stash->findOrCreate( user => { table => 'u', default => 'anon' } );
 
-ok( 'users' eq $u->{table}, 'findOrCreate (find). Back to 1st stash.' );
+    ok( 'users' eq $u->{table}, 'findOrCreate (find). Back to 1st stash.' );
 
-clean();
+    clean();
 
-diag( "Testing Pony::Stash $Pony::Stash::VERSION" );
+    diag( "Testing Pony::Stash $Pony::Stash::VERSION" );
 
     # Clean up
     #
