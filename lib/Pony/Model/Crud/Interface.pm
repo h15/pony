@@ -1,11 +1,11 @@
 package Pony::Model::Crud::Interface;
-use Pony::Object;
+use Pony::Object -abstract;
 
-    sub create  : Public {};
-    sub read    : Public {};
-    sub update  : Public {};
-    sub delete  : Public {};
-    sub list    : Public {};
-    sub count   : Public {};
+    sub create  : Abstract {};
+    sub read    : Abstract {};
+    sub update  : Abstract {};
+    sub delete  : Abstract {};
+    sub list    : Abstract {};
+    sub count   : Abstract {};
 
 1;

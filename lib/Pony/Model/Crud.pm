@@ -1,6 +1,5 @@
 package Pony::Model::Crud;
 use Pony::Object;
-use interface 'Pony::Model::Crud::Interface';
 
     # Adaptor for Pony::Model::Crud drivers.
     # Define driver in Pony::Stash 'dbDriver'.

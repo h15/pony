@@ -1,5 +1,5 @@
 package Pony::Model::Crud::SQLite;
-use Pony::Object;
+use Pony::Object 'Pony::Model::Crud::Interface';
 use Pony::Model::Dbh::SQLite;
 
     has table => undef;

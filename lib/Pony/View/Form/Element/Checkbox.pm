@@ -18,6 +18,34 @@ use Pony::Object qw/Pony::View::Form::Element/;
 
 __END__
 
+=head1 NAME
+
+Pony::View::Form::Element::Checkbox the Pony::View::Form element.
+
+=head1 OVERVIEW
+
+Pony::View::Form::Element::Checkbox can be used for rendering and validation
+checkbox html element.
+
+=head1 SYNOPSIS
+
+    package My::Form;
+    use Pony::Object qw/Pony::View::Form/;
+    
+        has action => '/url';
+        has method => 'post';
+        has id     => 'pony-form';
+        
+        sub create
+            {
+                my $this = shift;
+                
+                $this->addElement ( isBot => checkbox =>
+                                    { required => 1, label => 'I\'m human' } );
+            }
+        
+    1;
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright (C) 2012, Georgy Bazhukov.

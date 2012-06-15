@@ -1,5 +1,5 @@
 package Pony::Model::Crud::MySQL;
-use Pony::Object;
+use Pony::Object 'Pony::Model::Crud::Interface';
 use Pony::Model::Dbh::MySQL;
 
     has table => undef;
