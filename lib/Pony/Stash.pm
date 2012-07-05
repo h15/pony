@@ -4,11 +4,13 @@ use Pony::Object 'singleton';
     # "R2D2 where are you?"
 
     use Storable qw(freeze thaw);
+    use YAML::Tiny;
     
-    our $VERSION = 0.02;
+    our $VERSION = 0.03;
     
     protected conf => {};
     protected file => '';
+    protected type => '';
     
     # Read file and init
     # config by data from file.
@@ -18,15 +20,30 @@ use Pony::Object 'singleton';
             my $this = shift;
                $this->file = shift;
             
-            open F, $this->file or warn 'Can\'t read ' . $this->file;
+            ( $this->type ) = ( $this->file =~ /\.([\w]+)$/ );
+            $this->type = lc $this->type;
+            
+            given( $this->type )
             {
-                local $/;
-                
-                my $conf = <F>;
-                
-                $this->conf = ( length $conf ? thaw $conf : {} );
+                when( /ya?ml/ )
+                {
+                    my $yaml = new YAML::Tiny;
+                    $this->conf = $yaml->read( $this->file )->[0] || {};
+                }
+                when( 'dat' )
+                {
+                    open F, $this->file or warn 'Can\'t read ' . $this->file;
+                    {
+                        local $/;
+                        
+                        my $conf = <F>;
+                        
+                        $this->conf = ( length $conf ? thaw $conf : {} );
+                    }
+                    close F;
+                }
+                default { die 'Unknown config type "'. $this->type .'"' }
             }
-            close F;
         }
     
     # " - What's going on... Buddy? 
@@ -36,9 +53,21 @@ use Pony::Object 'singleton';
         {
             my $this = shift->new;
             
-            open  F, '>', $this->file or warn 'Can\'t write into '.$this->file;
-            print F freeze($this->conf);
-            close F;
+            given( $this->type )
+            {
+                when( /ya?ml/ )
+                {
+                    my $yaml = new YAML::Tiny;
+                    $yaml->[0] = $this->conf;
+                    $yaml->write( $this->file );
+                }
+                when( 'dat' )
+                {
+                    open  F, '>', $this->file or warn 'Can\'t write into '.$this->file;
+                    print F freeze($this->conf);
+                    close F;
+                }
+            }
         }
     
     # Find config and return.

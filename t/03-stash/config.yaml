@@ -1,0 +1,6 @@
+---
+article:
+  table: art
+user:
+  default: anonymous
+  table: users
