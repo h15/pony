@@ -20,6 +20,9 @@ use Pony::Object 'singleton';
             my $this = shift;
                $this->file = shift;
             
+            die  'Can\t read "'. $this->file .'"'  unless -r $this->file;
+            warn 'Can\t write "'. $this->file .'"' unless -w $this->file;
+            
             ( $this->type ) = ( $this->file =~ /\.([\w]+)$/ );
             $this->type = lc $this->type;
             
@@ -27,8 +30,8 @@ use Pony::Object 'singleton';
             {
                 when( /ya?ml/ )
                 {
-                    my $yaml = new YAML::Tiny;
-                    $this->conf = $yaml->read( $this->file )->[0] || {};
+                    my $yaml = YAML::Tiny->read( $this->file );
+                    $this->conf = $yaml->[0] || {};
                 }
                 when( 'dat' )
                 {
