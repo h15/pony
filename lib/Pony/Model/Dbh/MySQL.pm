@@ -2,28 +2,28 @@ package Pony::Model::Dbh::MySQL;
 use Pony::Object 'singleton';
 use DBI;
 
-    has dbh => undef;
-    
-    sub init
+  has dbh => undef;
+  
+  sub init : Public
+    {
+      my $this = shift;
+      my $auth = shift;
+      my $conn = sprintf 'DBI:mysql:database=%s;host=%s',
+                          $auth->{dbname}, $auth->{host};
+      
+      $this->dbh = DBI->connect
+      (
+        $conn,
+        $auth->{user},
+        $auth->{password},
         {
-            my $this = shift;
-            my $auth = shift;
-            my $conn = sprintf 'DBI:mysql:database=%s;host=%s',
-                                $auth->{dbname}, $auth->{host};
-            
-            $this->dbh = DBI->connect
-                         (
-                             $conn,
-                             $auth->{user},
-                             $auth->{password},
-                             {
-                                RaiseError => 1,
-                                mysql_enable_utf8 => 1,
-                                mysql_auto_reconnect => 1
-                             }
-                         )
-                         or die $DBI::errstr;
+          RaiseError => 1,
+          mysql_enable_utf8 => 1,
+          mysql_auto_reconnect => 1
         }
+      )
+      or die $DBI::errstr;
+    }
 
 1;
 

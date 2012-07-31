@@ -15,4 +15,3 @@ use Pony::Object;
         }
     
 1;
-
