@@ -1,0 +1,12 @@
+
+=pod
+
+=head1 NAME
+
+Spaghetti
+
+=head1 OVERVIEW
+
+Web application for developers. Supports CVS Git.
+
+=cut
