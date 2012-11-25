@@ -5,7 +5,7 @@
 #   Pony::Model::Dbh::MongoDB
 
 package Pony::Model::ActiveRecord::MongoDB;
-use Pony::Object -abstract;
+use Pony::Object -abstract, 'Pony::Model::ActiveRecord::Interface';
 use Pony::Model::Crud;
 
   protected _id => undef;     # mongoId
@@ -15,9 +15,9 @@ use Pony::Model::Crud;
   
   
   # Function: init
-  #   Constructor of user object. Generate properties form _storable.
+  #   Constructor of AR object. Generate properties form _storable.
   # Returns:
-  #   User::Object
+  #   Object
   
   sub init : Public
     {
@@ -154,6 +154,7 @@ use Pony::Model::Crud;
       
       $this->$_ = $i_data->{$_} for @{ $this->_storable };
     }
+  
   
   # Function: set
   #   Set some key pairs of object.

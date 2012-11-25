@@ -5,8 +5,8 @@
 #   Pony::Model::Crud
 
 package Pony::Model::ActiveRecord::MySQL;
-use Pony::Object -abstract;
-use Pony::Model::Crud;
+use Pony::Object -abstract, 'Pony::Model::ActiveRecord::Interface';;
+use Pony::Model::Crud::MySQL;
 
   protected _id => undef;
   protected _model => undef;
@@ -26,7 +26,7 @@ use Pony::Model::Crud;
       # Generate properties.
       public $_ for @{ $this->_storable };
       
-      $this->_model = new Pony::Model::Crud::MySQL( $this->_table );
+      $this->_model = Pony::Model::Crud::MySQL->new( $this->_table );
       
       return $this;
     }
