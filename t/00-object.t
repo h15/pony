@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use feature ':5.10';
 
-use Test::More tests => 83;
+use Test::More tests => 84;
 
 use_ok 'Pony::Object';
 
@@ -349,6 +349,19 @@ use Abstract::Fourth;
     
     my $c13 = eval { new Abstract::Fourth };
     ok( !defined $abs, 'Inheritance of abstract classes' );
+    
+use Pony::Object::Throwable;
+
+    # Error test
+    try {
+        throw Pony::Object::Throwable("Bad wolf");
+        say "Never say die";
+    }
+    catch {
+        ok(1, "Try/Catch test");
+    };
+    
+    say '-'x 79;
     
     #=========
     #   END

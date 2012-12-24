@@ -8,7 +8,7 @@ use Storable qw/dclone/;
 use Module::Load;
 use Carp qw(confess);
 use Scalar::Util qw(refaddr);
-use signatures;
+use Error;
 
 use constant DEBUG => 0;
 
@@ -56,7 +56,7 @@ sub import
     strict  ->import;
     warnings->import;
     feature ->import(':5.10');
-    Sub::Signatures->import($call);
+    Error   ->import;
     
     # Base classes and params.
     parseParams($call, "${call}::ISA", @_);
@@ -165,8 +165,10 @@ sub predefine
     
     *{$call.'::has'}     = sub { addProperty ($call, @_) };
     *{$call.'::public'}  = sub { addPublic   ($call, @_) };
-    *{$call.'::private'}   = sub { addPrivate  ($call, @_) };
-    *{$call.'::protected'} = sub { addProtected($call, @_) };
+    *{$call.'::private'}  = sub { addPrivate  ($call, @_) };
+    *{$call.'::protected'}= sub { addProtected($call, @_) };
+    *{$call.'::try'}      = sub (&;@) { eval{ shift->() }; shift->($@) if $@; };
+    *{$call.'::catch'}    = sub (&) { @_ };
     
     
     #=========================
