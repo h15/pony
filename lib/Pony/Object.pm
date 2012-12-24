@@ -8,7 +8,6 @@ use Storable qw/dclone/;
 use Module::Load;
 use Carp qw(confess);
 use Scalar::Util qw(refaddr);
-use Error;
 
 use constant DEBUG => 0;
 
@@ -56,7 +55,6 @@ sub import
     strict  ->import;
     warnings->import;
     feature ->import(':5.10');
-    Error   ->import;
     
     # Base classes and params.
     parseParams($call, "${call}::ISA", @_);
