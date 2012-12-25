@@ -18,7 +18,7 @@ use Pony::Object;
       $this->message = shift;
       ($this->package, $this->file, $this->line) = caller;
       
-      printf "\n\"%s\" at %s (%s:%s)\n",
+      printf STDERR "\n\"%s\" at %s (%s:%s)\n",
         $this->message, $this->package, $this->file, $this->line;
       
       die $this;

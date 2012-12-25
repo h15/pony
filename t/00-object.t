@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use feature ':5.10';
 
-use Test::More tests => 84;
+use Test::More tests => 86;
 
 use_ok 'Pony::Object';
 
@@ -355,13 +355,25 @@ use Pony::Object::Throwable;
     # Error test
     try {
         throw Pony::Object::Throwable("Bad wolf");
-        say "Never say die";
+        ok(0, "Life after death.");
     }
     catch {
         ok(1, "Try/Catch test");
+    }
+    finally {
+        ok(1, "Finally test");
     };
     
-    say '-'x 79;
+    try {
+        # do nothing
+        1 if 1+1 == 2;
+    }
+    catch {
+        ok(0, "Bad catch");
+    }
+    finally {
+        ok(1, "More finally");
+    };
     
     #=========
     #   END

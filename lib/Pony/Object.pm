@@ -26,7 +26,7 @@ BEGIN
     }
   }
 
-our $VERSION = 0.05;
+our $VERSION = 0.06;
 
 
 # This function will runs on each use of this module.
@@ -161,12 +161,22 @@ sub predefine
     # Define "keywords".
     #====================
     
-    *{$call.'::has'}     = sub { addProperty ($call, @_) };
-    *{$call.'::public'}  = sub { addPublic   ($call, @_) };
+    # Access for properties.
+    *{$call.'::has'}      = sub { addProperty ($call, @_) };
+    *{$call.'::public'}   = sub { addPublic   ($call, @_) };
     *{$call.'::private'}  = sub { addPrivate  ($call, @_) };
     *{$call.'::protected'}= sub { addProtected($call, @_) };
-    *{$call.'::try'}      = sub (&;@) { eval{ shift->() }; shift->($@) if $@; };
-    *{$call.'::catch'}    = sub (&) { @_ };
+    
+    # Try, Catch, Finally.
+    *{$call.'::try'} = sub (&;@) {
+      my($try, $catch, $finally) = @_;
+      local $@;
+      eval{ $try->() };
+      $catch->($@) if $@;
+      $finally->();
+    };
+    *{$call.'::catch'} = sub (&;@) { @_ };
+    *{$call.'::finally'} = sub (&) { @_ };
     
     
     #=========================
