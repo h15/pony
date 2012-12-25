@@ -1,13 +1,30 @@
+
+# Class: Pony::Web::Dispatcher
+# | It solves which route was requested
+# | and what action should be runned.
+
 package Pony::Web::Dispatcher;
 use Pony::Object;
-  
-  use Pony::Web::Response;
-  use Module::Load;
+use Pony::Web::Response;
+use Module::Load;
   
   protected app => undef;
   protected request => undef;
   protected response => undef;
   
+
+  # Function: init
+  #   Constructor.
+  #
+  # Access: Public
+  #
+  # Parameters:
+  #   app - application instance.
+  #   request - web server request.
+  #
+  # Returns:
+  #   this
+
   sub init : Public
     {
       my $this = shift;
@@ -18,6 +35,15 @@ use Pony::Object;
       return $this;
     }
   
+
+  # Function: dispatch
+  #   Run action for route or routes and return response.
+  #
+  # Access: Public
+  #
+  # Returns:
+  #   Pony::Web::Response
+
   sub dispatch : Public
     {
       my $this = shift;
@@ -35,6 +61,15 @@ use Pony::Object;
       return $this->response;
     }
   
+  
+  # Function: _runRouter
+  #   Get matched routes.
+  #
+  # Access: Protect
+  #
+  # Returns:
+  #   Pony::Web::Router:Route || Array Ref
+
   sub _runRouter : Protected
     {
       my $this = shift;
@@ -43,6 +78,15 @@ use Pony::Object;
       return $router->match( $this->request );
     }
   
+
+  # Function: _runAction
+  #   Load controller and run action.
+  #
+  # Access: Protected
+  #
+  # Parameters:
+  #   route
+
   sub _runAction : Protected
     {
       my $this = shift;

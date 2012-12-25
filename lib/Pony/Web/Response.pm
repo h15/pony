@@ -1,3 +1,4 @@
+
 package Pony::Web::Response;
 use Pony::Object;
   
@@ -5,7 +6,7 @@ use Pony::Object;
   protected header => [];
   protected body   => undef;
   
-  sub init : Public;
+  sub init : Public
     {
       my $this = shift;
       return $this;
@@ -47,4 +48,3 @@ use Pony::Object;
     }
   
 1;
-
