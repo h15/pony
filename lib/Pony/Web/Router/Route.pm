@@ -11,6 +11,7 @@ use Pony::Object::Throwable;
   protected format => undef;
   protected checkFormat => {};
   protected params => [];
+  protected matches => [];
   protected default => undef;
   protected module => undef;
   protected controller => undef;
@@ -91,6 +92,27 @@ use Pony::Object::Throwable;
       }
       
       return $this;
+    }
+  
+  # Function: match
+  #   Check route and get params.
+  #
+  # Access: Public
+  #
+  # Parameters:
+  #   path - requested path
+  #
+  # Return: clone of $this || undef
+  
+  sub match : Public
+    {
+      my $this  = shift;
+      my $path  = shift;
+      my $regex = $this->pattern;
+      my $route = $this->clone();
+      
+      return $route if ( @{ $route->matches } = $path =~ /^\/$regex$/ );
+      return undef;
     }
 
 1;

@@ -70,10 +70,11 @@ use Pony::Object::Throwable;
     {
       my $this = shift;
       my $request = shift;
+      my $route;
       
       for my $r ( @{ $this->routes } )
       {
-        return $r->clone() if $r->match($request->getPath());
+        return $route if $route = $r->match($request->getPath());
       }
       
       throw Pony::Object::Throwable("404");
