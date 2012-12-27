@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use feature ':5.10';
 
-use Test::More tests => 86;
+use Test::More tests => 87;
 
 use_ok 'Pony::Object';
 
@@ -373,6 +373,13 @@ use Pony::Object::Throwable;
     }
     finally {
         ok(1, "More finally");
+    };
+    
+    try {
+      throw Pony::Object::Throwable("Bad wolf2");
+    }
+    catch {
+      ok(1, "Catch without finally");
     };
     
     #=========

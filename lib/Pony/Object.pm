@@ -173,7 +173,7 @@ sub predefine
       local $@;
       eval{ $try->() };
       $catch->($@) if $@;
-      $finally->();
+      $finally->() if defined $finally;
     };
     *{$call.'::catch'} = sub (&;@) { @_ };
     *{$call.'::finally'} = sub (&) { @_ };

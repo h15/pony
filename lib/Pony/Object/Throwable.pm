@@ -23,5 +23,11 @@ use Pony::Object;
       
       die $this;
     }
+  
+  sub getMessage : Public
+    {
+      my $this = shift;
+      return $this->message;
+    }
 
 1;
