@@ -3,10 +3,10 @@
 
 =head1 NAME
 
-Spaghetti
+Example
 
 =head1 OVERVIEW
 
-Web application for developers. Supports CVS Git.
+Pony web application.
 
 =cut

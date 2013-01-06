@@ -1,40 +1,28 @@
 
 # Class: App
-#   Application singleton.
+#   Example application.
+#
 # Extends:
-#   Pony::Application
+#   Pony::Web
 
 package App;
 use Pony::Object singleton => 'Pony::Web';
+  
+  # Function: startup
+  #   Runs once.
+  # 
+  # Access: Public
 
-  use App::Router;
-  use Pony::Stash;
-  
-  public host => undef;
-  public port => undef;
-  public path => undef;
-  public router => undef;
-  public stash => undef;
-  
-  sub init : Public
+  sub startup : Public
     {
       my $this = shift;
-      my %param = @_;
       
-      ( $this->host, $this->port, $this->path ) = @param{qw/host port path/};
-      
-      $this->stash = new Pony::Stash;
-      $this->router = new App::Router;
-      $this->log('Server started');
-    }
-  
-  sub log : Public
-    {
-      my $this = shift;
-      my $text = shift;
-      
-      printf "[%d %s] %s\n", App->new->counter,
-                             scalar localtime(), $text;
+      $this->router->add('',
+      qw{
+        user_read     /user/read/:id(d).html  App::Controller::User->read
+        user_profile  /profile/:id(d).html    App::Controller::User->read
+        _ /:module(\w)/:controller(\w+)/:action(\w+) _
+      });
     }
 
 1;
