@@ -8,7 +8,7 @@
 package Pony::Web::Router;
 use Pony::Object;
 use Pony::Web::Router::Route;
-use Pony::Object::Throwable;
+use Pony::Web::Exception;
 
   protected routes => [];
   
@@ -77,7 +77,7 @@ use Pony::Object::Throwable;
         return $route if $route = $r->match($request->getPath());
       }
       
-      throw Pony::Object::Throwable("404");
+      throw Pony::Web::Exception(code => 404);
     }
 
 1;

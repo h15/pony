@@ -34,8 +34,10 @@ use Pony::Web::Param;
       my $this = shift;
       my $req = shift;
       
-      $this->cookies= Pony::Web::Cookie->new($req->{HTTP_COOKIE}) if exists $req->{HTTP_COOKIE};
-      $this->params = Pony::Web::Param->new($req->{QUERY_STRING}) if exists $req->{QUERY_STRING};
+      $this->cookies = Pony::Web::Cookie->new($req->{HTTP_COOKIE})
+        if exists $req->{HTTP_COOKIE};
+      $this->params = Pony::Web::Param->new($req->{QUERY_STRING})
+        if exists $req->{QUERY_STRING};
       $this->method = $req->{REQUEST_METHOD};
       $this->path   = $req->{PATH_INFO};
       $this->scheme = $req->{'psgi.url_scheme'};

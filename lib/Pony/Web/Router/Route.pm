@@ -4,7 +4,6 @@
 
 package Pony::Web::Router::Route;
 use Pony::Object;
-use Pony::Object::Throwable;
 
   protected name => undef;
   protected pattern => undef;
@@ -50,11 +49,15 @@ use Pony::Object::Throwable;
       $this->name = undef if $this->name eq '_';
       
       # Parse url.
-      for my $part ( split /[\/.]/, $url )
+      for my $part ( split /[\/\.]/, $url )
       {
         given( $part )
         {
-          when( /^[\w\d_\-]$/ )
+          when( '' )
+          {
+            
+          }
+          when( /^[\w\d_\-]+$/ )
           {
             # Just url part.
             $this->pattern .= "\/$part";
@@ -111,7 +114,7 @@ use Pony::Object::Throwable;
       my $regex = $this->pattern;
       my $route = $this->clone();
       
-      return $route if ( @{ $route->matches } = $path =~ /^\/$regex$/ );
+      return $route if ( @{ $route->matches } = $path =~ /^$regex$/ );
       return undef;
     }
 
