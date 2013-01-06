@@ -350,7 +350,7 @@ use Abstract::Fourth;
     my $c13 = eval { new Abstract::Fourth };
     ok( !defined $abs, 'Inheritance of abstract classes' );
     
-use Pony::Object::Throwable;
+#use Pony::Object::Throwable;
 
     # Error test
     try {
