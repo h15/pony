@@ -3,7 +3,7 @@
 #   Exception for 404 an other non-200 HTTP responses.
 
 package Pony::Web::Exception;
-use Pony::Object;
+use Pony::Object 'Pony::Object::Throwable';
 
   protected code => 500;
   protected message => 'Internal Server Error';
@@ -29,8 +29,21 @@ use Pony::Object;
       
       my %params = (ref $_[0]? %{$_[0]} : @_ ); # hashref || array
       $this->$_ = $params{$_} for keys %params;
+      ($this->package, $this->file, $this->line) = caller;
       
       die $this;
+    }
+  
+  sub getCode : Public
+    {
+      my $this = shift;
+      return $this->code;
+    }
+  
+  sub getMessage : Public
+    {
+      my $this = shift;
+      return $this->message;
     }
 
 1;

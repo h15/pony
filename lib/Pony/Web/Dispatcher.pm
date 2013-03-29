@@ -93,7 +93,7 @@ use Module::Load;
       my $route = shift;
       
       my $controller = $route->getController();
-      my $action = $route->getAction();
+      my $action = $route->getAction() . 'Action';
       
       my $appName = $this->app->stash->get('application');
       my $package = "${appName}::Controller::$controller";

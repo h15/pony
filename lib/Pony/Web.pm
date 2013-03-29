@@ -16,25 +16,34 @@ use Pony::Object -abstract;
   use Pony::Web::Request;
   use Pony::Web::Response;
   use Pony::Web::Dispatcher;
+  use Pony::Web::Router;
   use Pony::Stash;
   
   public stash => undef;
-  public app => undef;
-  public router => undef;
+  protected router => undef;
+  
+  
+  # Method: init
+  #   Init application (read config).
+  # Access: public
+  # Return: Pony::Web
   
   sub init : Public
     {
       my $this = shift;
          $this->stash = new Pony::Stash('./conf/application.yaml');
-      
-      my $app = Pony::Stash->get('application');
-      
-      load $app;
-      
-      $this->app = $app->new;
+         $this->router = new Pony::Web::Router;
+      # User's init
+      $this->startup();
       
       return $this;
     }
+  
+  
+  # Method: clop
+  #   clop-clop-clop
+  # Access: public
+  # Return: Array
   
   sub clop : Public
     {
@@ -42,12 +51,42 @@ use Pony::Object -abstract;
       my $env = shift;
          $env = new Plack::Request($env);
       
-      my $request     = new Pony::Web::Request($env);
-      my $dispatcher  = new Pony::Web::Dispatcher;
+      my $request    = new Pony::Web::Request($env->{env});
+      my $dispatcher = new Pony::Web::Dispatcher($this, $request);
       
-      my $response = $dispatcher->dispatch($this->app, $request);
+      my $response;
+      
+      try {
+        $response = $dispatcher->dispatch();
+      }
+      catch {
+        # TODO: log errors instead print to STDOUT
+        # TODO: create default error handler
+        my $e = shift;
+        if ($e->isa('Pony::Web::Exception')) {
+          say $e->dump();
+        
+          $response = Pony::Web::Response->new(
+            code => $e->getCode(), body => '<pre>'.$e->dump().'</pre>'
+          );
+        }
+        else {
+          say $e;
+        }
+      };
       
       return $response->render();
+    }
+  
+  
+  # Method: getRouter
+  # Access: public
+  # Return: Pony::Web::Router
+  
+  sub getRouter : Public
+    {
+      my $this = shift;
+      return $this->router;
     }
 
 1;
@@ -56,7 +95,7 @@ __END__
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2012, Georgy Bazhukov.
+Copyright (C) 2012 - 2013, Georgy Bazhukov.
 
 This program is free software, you can redistribute it and/or modify it under
 the terms of the Artistic License version 2.0.

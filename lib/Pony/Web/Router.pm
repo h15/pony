@@ -44,10 +44,23 @@ use Pony::Web::Exception;
       my $this = shift;
       my $module = shift;
       
-      for( my $i = 0; $i < $#_; $i += 3 )
+      for my $line ( $this->_createRouteLinesFromText($_[0]) )
       {
-        push @{ $this->routes },
-          Pony::Web::Router::Route->new($module, @_[$i..$i+2]);
+        # $extension is optional parameter
+        my ($name, $pattern, $extension, $handler) = split /\s+/, $line;
+        
+        if (not defined $handler) {
+          $handler = $extension;
+          ($extension) = $pattern =~ /\.([\w\d]+)$/;
+        }
+        
+        push @{ $this->routes }, Pony::Web::Router::Route->new(
+          module => $module,
+          name => $name,
+          url => $pattern,
+          extension => $extension,
+          handler => $handler
+        );
       }
       
       return $this;
@@ -56,14 +69,10 @@ use Pony::Web::Exception;
   
   # Function: match
   #   Search route by request.
-  #
   # Access: Public
-  #
   # Parameters:
   #   request - Pony::Web::Request
-  #
-  # Raise: 404
-  #
+  # Raise: Pony::Web::Exception 404
   # Return: Pony::Web::Router::Route
   
   sub match : Public
@@ -77,7 +86,25 @@ use Pony::Web::Exception;
         return $route if $route = $r->match($request->getPath());
       }
       
-      throw Pony::Web::Exception(code => 404);
+      throw Pony::Web::Exception(code => 404, message => 'Page not found');
     }
-
+  
+  
+  # Method: _createRouteLinesFromText
+  #   Split text by \n, trim lines, remove empty lines.
+  # Access: Protected
+  # Return: Array of Str
+  
+  sub _createRouteLinesFromText : Protected
+    {
+      my $this = shift;
+      my $text = shift;
+      
+      my @lines = split "\n", $text;
+      map { s/^\s*(.*?)\s*$/$1/ } @lines;
+      @lines = grep { length $_ > 0 } @lines;
+      
+      return @lines;
+    }
+  
 1;

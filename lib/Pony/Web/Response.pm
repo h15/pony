@@ -1,14 +1,33 @@
+# Class: Pony::Web::Response
+#   Standard response.
 
 package Pony::Web::Response;
 use Pony::Object;
   
-  protected code   => undef;
+  protected code   => 200;
   protected header => [];
-  protected body   => undef;
+  protected body   => '';
   
+  
+  # Method: init
+  #   Constructor.
+  # Parameter: undef || Str || HashRef || Array
   sub init : Public
     {
       my $this = shift;
+      
+      if (@_) {
+        if (@_ == 1 && !ref $_[0]) { # Str
+          $this->body = shift;
+        }
+        else { 
+          my %params = (ref $_[0] ? %{ $_[0] } : @_ ); # HashRef || Array
+          $this->body   = $params{'body'}   if exists $params{'body'};
+          $this->code   = $params{'code'}   if exists $params{'code'};
+          $this->header = $params{'header'} if exists $params{'header'};
+        }
+      }
+      
       return $this;
     }
   
@@ -42,7 +61,7 @@ use Pony::Object;
       
       return [
               $this->code,
-              [ $this->header ],
+              $this->header,
               [ $this->body ]
              ];
     }

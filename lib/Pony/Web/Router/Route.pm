@@ -1,4 +1,3 @@
-
 # Class: Pony::Web::Router::Route
 #   Routing rule for Pony::Web::Dispatcher
 
@@ -15,6 +14,8 @@ use Pony::Object;
   protected module => undef;
   protected controller => undef;
   protected action => undef;
+  protected extension => undef;
+  
   
   # Function: init
   # | Create route.
@@ -40,16 +41,18 @@ use Pony::Object;
   sub init : Public
     {
       my $this = shift;
-         $this->module = shift || 'default';
-         $this->name = shift;
-      my $url = shift;
-      my $handler = shift;
+      my $params = {@_};
+      ($this->module, $this->name, $this->extension) = @$params{qw/module name extension/};
+      my ($url, $handler) = @$params{qw/url handler/};
       
       # '_' means that this route hasn't name.
       $this->name = undef if $this->name eq '_';
       
+      my ($urlWithoutExtension) = $url =~ /^(.*?)\.([\w\d]+)$/;
+      $url = $urlWithoutExtension if defined $urlWithoutExtension;
+      
       # Parse url.
-      for my $part ( split /[\/\.]/, $url )
+      for my $part (split /\//, $url)
       {
         given( $part )
         {
@@ -82,6 +85,13 @@ use Pony::Object;
         }
       }
       
+      # Append extension if it's necessary.
+      if (defined $urlWithoutExtension)
+      {
+        $this->pattern .= '\.' . $this->extension;
+        $this->format .= '.' . $this->extension;
+      }
+      
       # Parse handler.
       if ( $handler =~ /->/ )
       {
@@ -96,6 +106,7 @@ use Pony::Object;
       
       return $this;
     }
+  
   
   # Function: match
   #   Check route and get params.
@@ -117,5 +128,29 @@ use Pony::Object;
       return $route if ( @{ $route->matches } = $path =~ /^$regex$/ );
       return undef;
     }
-
+  
+  
+  # Method: getController
+  #   Getter for controller
+  # Access: public
+  # Return: Str
+  
+  sub getController : Public
+    {
+      my $this = shift;
+      return $this->controller;
+    }
+  
+  
+  # Method: getAction
+  #   Getter for action
+  # Access: public
+  # Return: Str
+  
+  sub getAction : Public
+    {
+      my $this = shift;
+      return $this->action;
+    }
+  
 1;
