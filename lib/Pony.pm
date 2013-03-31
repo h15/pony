@@ -1,6 +1,6 @@
 package Pony;
 
-our $VERSION = 0.03;
+our $VERSION = 0.02;
 
 __END__
 
@@ -206,7 +206,7 @@ Create record into database.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2011 - 2013, Georgy Bazhukov.
+Copyright (C) 2011, Georgy Bazhukov.
 
 This program is free software, you can redistribute it and/or modify it under
 the terms of the Artistic License version 2.0.

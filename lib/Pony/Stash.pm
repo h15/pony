@@ -1,8 +1,12 @@
+# Class: Pony::Stash
+#   Uses to store config.
+
 package Pony::Stash;
 use Pony::Object 'singleton';
 
   # "R2D2 where are you?"
   
+  use Pony::Object::Throwable;
   use Storable qw(freeze thaw);
   use YAML::Tiny;
   
@@ -14,37 +18,42 @@ use Pony::Object 'singleton';
   
   
   # Function: init
-  #   Read file and init config by data from file.
-  #   It can be stored by Storable::freeze or in yaml.
+  # | Read file and init config by data from file.
+  # | It can be stored by Storable::freeze or in yaml.
   #
   # Parameters:
   #   file - path to config file.
   #
   # Raises:
-  #   - *die* if file does not readable.
-  #   - *warn* if file doesn't writable.
+  #   Pony::Object::Throwable - if file does not readable || writable || some other error.
   
   sub init : Public
     {
       my $this = shift;
          $this->file = shift;
       
-      die  'Can\t read "'. $this->file .'"'  unless -r $this->file;
-      warn 'Can\t write "'. $this->file .'"' unless -w $this->file;
+      throw Pony::Object::Throwable('Can\'t read ' .$this->file) unless -r $this->file;
+      throw Pony::Object::Throwable('Can\'t write '.$this->file) unless -w $this->file;
       
       ( $this->type ) = ( $this->file =~ /\.([\w]+)$/ );
       $this->type = lc $this->type;
       
       given( $this->type )
       {
-        when( /ya?ml/ )
+        # Runs if stash format is 'yaml' or 'yml'.
+        # See http://en.wikipedia.org/wiki/YAML for more information.
+        when( /^ya?ml$/ )
         {
-          my $yaml = YAML::Tiny->read( $this->file );
+          my $yaml = YAML::Tiny->read( $this->file )
+            or throw Pony::Object::Throwable('Can\'t read '.$this->file);
           $this->conf = $yaml->[0] || {};
         }
+        # Runs if stash format is 'dat'.
+        # 'dat' is a simple data dump.
         when( 'dat' )
         {
-          open F, $this->file or warn 'Can\'t read ' . $this->file;
+          open F, $this->file or
+            throw Pony::Object::Throwable('Can\'t read '.$this->file);
           {
             local $/;
             
@@ -54,12 +63,22 @@ use Pony::Object 'singleton';
           }
           close F;
         }
-        default { die 'Unknown config type "'. $this->type .'"' }
+        # Runs on unknown format.
+        #
+        default
+        {
+          throw Pony::Object::Throwable
+            ('Unknown config type "'. $this->type .'"')
+        }
       }
     }
   
-  # " - What's going on... Buddy? 
-  #   - You're being put into carbon-freeze. "
+  
+  # Method: save
+  # | Store config into config file.
+  # |
+  # | " - What's going on... Buddy? 
+  # |   - You're being put into carbon-freeze. "
   
   sub save : Public
     {
@@ -75,15 +94,19 @@ use Pony::Object 'singleton';
         }
         when( 'dat' )
         {
-          open  F, '>', $this->file or warn 'Can\'t write into '.$this->file;
+          open  F, '>', $this->file
+            or throw Pony::Object::Throwable('Can\'t write into '.$this->file);
           print F freeze($this->conf);
           close F;
         }
       }
     }
   
-  # Find config and return.
-  # Create config if not found ... and return result.
+  
+  # Method: findOrCreate
+  # | Find config and return.
+  # | Create config if not found ... and return result.
+  # Return: HashRef || Str
   
   sub findOrCreate : Public
     {
@@ -95,8 +118,13 @@ use Pony::Object 'singleton';
       return $this->get($name);
     }
   
-  # Find config by name and return.
-  # Return undef, if can't find.
+  
+  # Method: get
+  # | Find config by name and return.
+  # | Return undef, if can't find.
+  # Parameters:
+  #   name - param's name
+  # Return: HashRef || Str || undef
   
   sub get : Public
     {
@@ -107,8 +135,13 @@ use Pony::Object 'singleton';
       return undef;
     }
   
-  # Create or update stash hash
-  # into $this->conf.
+  
+  # Method: set
+  # | Create or update stash hash
+  # | into $this->conf.
+  # Parameters:
+  #   name - key
+  #   conf - value
   
   sub set : Public
     {
@@ -118,8 +151,11 @@ use Pony::Object 'singleton';
       $this->conf->{$name} = $conf;
     }
   
-  # Delete element from stash hash.
-  #
+  
+  # Method: delete
+  #   Delete element from stash hash.
+  # Parameters:
+  #   name
   
   sub delete : Public
     {
@@ -129,10 +165,14 @@ use Pony::Object 'singleton';
       delete $this->conf->{$name};
     }
   
+  
+  # Method: getFileName
+  #   Getter for *file*
+  # Return: Str
+  
   sub getFileName : Public
     {
       my $this = shift->new;
-      
       return $this->file;
     }
   
