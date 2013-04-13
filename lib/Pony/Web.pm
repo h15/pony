@@ -12,6 +12,7 @@ use Pony::Object -abstract;
   
   use Plack::Request;
   use Module::Load;
+  use Text::Xslate;
   
   use Pony::Web::Request;
   use Pony::Web::Response;
@@ -21,6 +22,8 @@ use Pony::Object -abstract;
   
   public stash => undef;
   protected router => undef;
+  protected renderer => undef;
+  protected templatePath => '';
   
   
   # Method: init
@@ -33,6 +36,9 @@ use Pony::Object -abstract;
       my $this = shift;
          $this->stash = new Pony::Stash('./conf/application.yaml');
          $this->router = new Pony::Web::Router;
+         $this->renderer = new Text::Xslate;
+         $this->templatePath = $this->stash->get('path')->{template};
+      
       # User's init
       $this->startup();
       

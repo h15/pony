@@ -2,8 +2,9 @@
 #   Standard response.
 
 package Pony::Web::Response;
-use Pony::Object;
+use Pony::Object qw/Pony::Web::AbstractModule/;
   
+  protected app    => undef;
   protected code   => 200;
   protected header => [];
   protected body   => '';
@@ -29,6 +30,16 @@ use Pony::Object;
       }
       
       return $this;
+    }
+  
+  sub renderTemplate : Public
+    {
+      my $this = shift;
+      my $template = shift;
+      my $params = (ref $_[0] ? $_[0] : {@_});
+      $template = sprintf '%s/%s.tx', $this->getApp()->templatePath, $template;
+      $this->body = $this->getApp()->renderer->render($template, $params);
+      return $this->render();
     }
   
   sub setCode : Public
