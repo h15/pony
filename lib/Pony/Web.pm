@@ -23,7 +23,7 @@ use Pony::Object -abstract;
   public stash => undef;
   protected router => undef;
   protected renderer => undef;
-  protected templatePath => '';
+  protected path => {};
   
   
   # Method: init
@@ -36,9 +36,12 @@ use Pony::Object -abstract;
       my $this = shift;
          $this->stash = new Pony::Stash('./conf/application.yaml');
          $this->router = new Pony::Web::Router;
-         $this->renderer = new Text::Xslate;
-         $this->templatePath = $this->stash->get('path')->{template};
-      
+         $this->path = $this->stash->get('path');
+         $this->renderer = Text::Xslate->new(
+            path => $this->getTemplatePath(),
+            cache_dir => $this->getCachePath(),
+         );
+         
       # User's init
       $this->startup();
       
@@ -93,6 +96,39 @@ use Pony::Object -abstract;
     {
       my $this = shift;
       return $this->router;
+    }
+  
+  
+  # Method: getTemplatePath
+  #   path->{template} getter
+  # Return: Str
+  
+  sub getTemplatePath : Public
+    {
+      my $this = shift;
+      return $this->path->{template};
+    }
+  
+  
+  # Method: getCachePath
+  #   path->{cache} getter
+  # Return: Str
+  
+  sub getCachePath : Public
+    {
+      my $this = shift;
+      return $this->path->{cache};
+    }
+  
+  
+  # Method: getRenderer
+  #   getter for renderer
+  # Return: Text::Xslate
+  
+  sub getRenderer : Public
+    {
+      my $this = shift;
+      return $this->renderer;
     }
 
 1;

@@ -1,10 +1,11 @@
 # Class: Pony::Web::Response
 #   Standard response.
+# Extends:
+#   Pony::Web::AbstractModule
 
 package Pony::Web::Response;
 use Pony::Object qw/Pony::Web::AbstractModule/;
   
-  protected app    => undef;
   protected code   => 200;
   protected header => [];
   protected body   => '';
@@ -13,6 +14,7 @@ use Pony::Object qw/Pony::Web::AbstractModule/;
   # Method: init
   #   Constructor.
   # Parameter: undef || Str || HashRef || Array
+  
   sub init : Public
     {
       my $this = shift;
@@ -32,23 +34,43 @@ use Pony::Object qw/Pony::Web::AbstractModule/;
       return $this;
     }
   
+  
+  # Method: renderTemplate
+  #   Render template with data.
+  # Parameters:
+  #   template - Str
+  #   params - HashRef || Hash
+  # Return: Pony::Web::Response
+  
   sub renderTemplate : Public
     {
       my $this = shift;
       my $template = shift;
       my $params = (ref $_[0] ? $_[0] : {@_});
-      $template = sprintf '%s/%s.tx', $this->getApp()->templatePath, $template;
-      $this->body = $this->getApp()->renderer->render($template, $params);
-      return $this->render();
+      $template = sprintf '%s.tx', $template;
+      $this->body = $this->getApp()->getRenderer()
+                         ->render($template, $params);
+      return $this;
     }
+  
+  
+  # Method: setCode
+  #   setter for code
+  # Parameter: code - Int
+  # Return: Pony::Web::Response
   
   sub setCode : Public
     {
       my $this = shift;
       $this->code = shift;
-      
       return $this;
     }
+  
+  
+  # Method: setBody
+  #   setter for body
+  # Parameter: body - Str
+  # Return: Pony::Web::Response
   
   sub setBody : Public
     {
@@ -58,23 +80,33 @@ use Pony::Object qw/Pony::Web::AbstractModule/;
       return $this;
     }
   
+  
+  # Method: addHeader
+  #   add headers to response
+  # Parameter: Array
+  # Return: Pony::Web::Response
+  
   sub addHeader : Public
     {
       my $this = shift;
       push @{ $this->header }, @_;
-      
       return $this;
     }
+  
+  
+  # Method: render
+  #   render response
+  # Return: ArrayRef - Twiggy::Server response
   
   sub render : Public
     {
       my $this = shift;
-      
       return [
-              $this->code,
-              $this->header,
-              [ $this->body ]
-             ];
+        $this->code,
+        $this->header,
+        [ $this->body ]
+      ];
     }
   
 1;
+

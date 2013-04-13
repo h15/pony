@@ -35,6 +35,12 @@ my $skel = {
   lib => {},
   log => {},
   test => {},
+  templates => {},
+  data => {
+    cache => {
+      renderer => {},
+    },
+  },
   'readme.md' => 'readme.md',
 };
 
@@ -164,6 +170,8 @@ mod: DEBUG
 host: 127.0.0.1
 port: 1337
 application: {{ appName }}
+path:
+    templates: ./templates
 
 __[ readme.md ]__
 # Name

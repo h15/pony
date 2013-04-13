@@ -1,0 +1,14 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Title <: $from :></title>
+</head>
+<body>
+  <h1>Hello from <: $from :></h1>
+  <ul>
+  : for $items -> $item {
+    <li><: $item.number :></li>
+  : }
+  </ul>
+</body>
+</html>

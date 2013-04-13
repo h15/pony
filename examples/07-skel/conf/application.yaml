@@ -3,5 +3,7 @@ mod: DEBUG
 host: 127.0.0.1
 port: 1337
 application: Test
-
+path:
+    template: ./templates
+    cache: ./data/cache
 

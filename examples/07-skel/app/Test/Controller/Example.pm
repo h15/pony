@@ -20,6 +20,14 @@ use Pony::Object qw/Pony::Web::Controller/;
         'Hello from Test::Controller::Example');
     }
   
+  sub testTemplateAction : Public
+    {
+      my $this = shift;
+      my @items;
+      push @items, {number => "Item number $_"} for 0..10;
+      return $this->render('test/test', from => 'Test',
+                           items => \@items);
+    }
 1;
 
 

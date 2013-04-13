@@ -6,6 +6,7 @@
 
 use lib "./lib";
 use lib "./app";
+use lib "../../lib";
 
 use File::Basename 'dirname';
 use File::Spec;

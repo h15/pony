@@ -14,6 +14,7 @@ use Pony::Object singleton => 'Pony::Web';
       my $this = shift;
       $this->router->add('', q{
         example_text /test/text Example->testText
+        example_template /test/template Example->testTemplate
       });
     }
 
